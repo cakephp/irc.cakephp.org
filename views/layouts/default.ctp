@@ -28,8 +28,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<title>
-		<?php __('CakeBot: the best friend of irc'); ?>
-		<?php echo $title_for_layout;?>
+		<?php echo $title_for_layout;?> 
+		<?php __('for CakeBot: the best friend of irc'); ?>
 	</title>
 	<?php
 		echo $html->charset();
@@ -69,12 +69,12 @@
 		<div id="sites_nav">
 			<ul class="navigation">
 				<li class="current"><a href="http://cakephp.org/">CakePHP</a></li>
-				<li><a href="http://bakery.cakephp.org/">Bakery</a></li>
 				<li><a href="http://api.cakephp.org/">API</a></li>
-				<li><a href="http://manual.cakephp.org/">Manual</a></li>
-				<li><a href="http://live.cakephp.org/">The Show</a></li>
+				<li><a href="http://book.cakephp.org/">Docs</a></li>
+				<li><a href="http://bakery.cakephp.org/">Bakery</a></li>
+				<li><a href="http://live.cakephp.org/">Live</a></li>
 				<li><a href="http://cakeforge.org/">Forge</a></li>
-				<li><a href="http://trac.cakephp.org/">Trac</a></li>
+				<li><a href="https://trac.cakephp.org/">Trac</a></li>
 			</ul>
 		</div>
 		<?php 

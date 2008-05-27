@@ -28,7 +28,9 @@
  */
 /**
  * Short description for class.
- *
+ * Commands:
+ * ngircd : starts irc server
+ * cake irc : launches irc bot
  *
  * @package		cakebot
  * @subpackage	cakebot.vendors

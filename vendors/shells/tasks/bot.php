@@ -37,6 +37,10 @@ App::import('Core', 'Socket');
 class BotTask extends CakeSocket {
 
 	var $nick = 'GwooBot';
+	
+	var $channel = null;
+	
+	var $requester = null;
 
 	var $channels = array(
 						'#test',
@@ -96,16 +100,16 @@ class BotTask extends CakeSocket {
 					if (isset($params[2])) {
 
 						$cmd = $params[2];
-						$channel = $params[3];
 						$msg = $params[4];
-
+						
 						switch ($cmd) {
 							case 'PRIVMSG':
+								$this->channel = $params[3];
 								$user = $this->getParams("!", $params[1], 3);
 								$this->requester = $user[0];
 								$this->out($msg);
 								if($msg = $this->handleMessage($msg)) {
-									$this->write("PRIVMSG {$channel} :{$msg}\r\n");
+									$this->write("PRIVMSG {$this->channel} :{$msg}\r\n");
 								}
 							break;
 							case '433': //Nick already registerd
@@ -138,25 +142,6 @@ class BotTask extends CakeSocket {
 
 	function handleMessage($msg) {
 		if (empty($msg)) {
-			return $msg;
-		}
-		$Tell = ClassRegistry::init('Tell');
-		$Log = ClassRegistry::init('Log');
-
-		//Handle tells
-		if ($msg{0} === '~') {
-			if (stripos($msg, '~tell') !== false) {
-				$params = $this->getParams("\s", $msg, 4);
-				$user = $params[1];
-				$tell = $params[3];
-			} else {
-				$params = $this->getParams("~", $msg, 2);
-				$user = $this->requester;
-				$tell = $params[1];
-			}
-
-			$message = $Tell->field('message', array('keyword' => $tell));
-			$msg = "{$user}: {$tell} is {$message}";
 			return $msg;
 		}
 
@@ -194,8 +179,27 @@ class BotTask extends CakeSocket {
 				break;
 			}
 		}
+		
+		$Tell = ClassRegistry::init('Tell');
+		
+		//return Tell
+		if ($msg{0} === '~') {
+			if (stripos($msg, '~tell') !== false) {
+				$params = $this->getParams("\s", $msg, 4);
+				$user = $params[1];
+				$tell = $params[3];
+			} else {
+				$params = $this->getParams("~", $msg, 2);
+				$user = $this->requester;
+				$tell = $params[1];
+			}
 
-		//Add Tell to database
+			$message = $Tell->field('message', array('keyword' => $tell));
+			$msg = "{$user}: {$tell} is {$message}";
+			return $msg;
+		}
+		
+		//add Tell to database
 		if (stripos($msg, $this->nick) !== false) {
 			$params = $this->getParams("\s", $msg, 4);
 			if (isset($params[2]) && $params[2] === 'is') {
@@ -212,6 +216,14 @@ class BotTask extends CakeSocket {
 				}
 			}
 			return $msg;
+		}
+		
+		//Log Messages
+		pr($msg);
+		$Log = ClassRegistry::init('Log');
+		$Log->create(array('channel' => $this->channel, 'username' => $this->requester, 'text' => $msg));
+		if ($Log->save()) {
+			$this->out('message logged for ' . $this->requester . ' in ' . $this->channel);
 		}
 	}
 

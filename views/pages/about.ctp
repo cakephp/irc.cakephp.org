@@ -1,0 +1,1 @@
+<?php /* SVN FILE: $Id$ */?>

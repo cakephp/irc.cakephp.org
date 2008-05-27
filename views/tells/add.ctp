@@ -1,4 +1,3 @@
-<?php /* SVN FILE: $Id$ */?>
 <div class="tells form">
 <?php echo $form->create('Tell');?>
 	<fieldset>
@@ -6,7 +5,6 @@
 	<?php
 		echo $form->input('keyword');
 		echo $form->input('message');
-		echo $form->input('modifed');
 	?>
 	</fieldset>
 <?php echo $form->end('Submit');?>

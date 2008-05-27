@@ -1,4 +1,3 @@
-<?php /* SVN FILE: $Id$ */?>
 <div class="tells view">
 <h2><?php  __('Tell');?></h2>
 	<dl><?php $i = 0; $class = ' class="altrow"';?>
@@ -22,9 +21,9 @@
 			<?php echo $tell['Tell']['created']; ?>
 			&nbsp;
 		</dd>
-		<dt<?php if ($i % 2 == 0) echo $class;?>><?php __('Modifed'); ?></dt>
+		<dt<?php if ($i % 2 == 0) echo $class;?>><?php __('Modified'); ?></dt>
 		<dd<?php if ($i++ % 2 == 0) echo $class;?>>
-			<?php echo $tell['Tell']['modifed']; ?>
+			<?php echo $tell['Tell']['modified']; ?>
 			&nbsp;
 		</dd>
 	</dl>
