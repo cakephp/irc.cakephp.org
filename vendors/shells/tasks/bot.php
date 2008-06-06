@@ -35,28 +35,111 @@
 App::import('Core', 'Socket');
 
 class BotTask extends CakeSocket {
-
-	var $nick = 'GwooBot';
+/**
+ * Nick to use in the channels
+ *
+ * @var string
+ * @access public
+ */
+	var $nick = 'CakeBot';
 	
+/**
+ * Internal channel holder
+ *
+ * @var string
+ * @access public
+ */
 	var $channel = null;
-	
+
+/**
+ * Internal requester holder
+ *
+ * @var string
+ * @access public
+ */
 	var $requester = null;
 
+/**
+ * Channels to join once connected
+ *
+ * @var array
+ * @access public
+ */
 	var $channels = array(
-						'#test',
-						);
+		'#cakephp',
+	);
 
-	var $config = array('host' => '127.0.0.1', 'protocol' => 'irc', 'port' => 6667, 'persistent' => false);
+/**
+ * Default connection paramiters 
+ *
+ * @var string
+ * @access public
+ */
+	var $config = array(
+		'host' => 'irc.freenode.net',
+		'protocol' => 'irc',
+		'port' => 6667,
+		'persistent' => false
+	);
 
-	//var $callbacks = array('~' => 'tell', '!' => 'command');
+/**
+ * The call back function to be called every time there is a pong (status updates maybe?) (NOT YET IMPLEMENTED)
+ *
+ * @var string
+ * @access public
+ */
+	var $callback = null;
 
+/**
+ * Associative array listing all the callback functions (using call_user_func) with their key as the function's name
+ *
+ * @var array
+ * @access public
+ */
+	var $hooks = array(); // Fill with associative array
+
+/**
+ * Construct this object
+ *
+ * @return void
+ * @access public
+ */
 	function __construct(&$dispatcher) {
 		parent::__construct($this->config);
 		$this->Dispatch =& $dispatcher;
 	}
 
+/**
+ * Not implemented
+ *
+ * @return void
+ * @access public
+ */
 	function startup() {}
 
+/**
+ * Not implemented
+ *
+ * @return void
+ * @access public
+ */
+	function initialize() {}
+
+
+/**
+ * Not implemented
+ *
+ * @return void
+ * @access public
+ */
+	function loadTasks() {}
+
+/**
+ * Overloads CakeSocket's connect
+ *
+ * @return boolean result
+ * @access public
+ */
 	function connect() {
 		if (is_resource($this->connection)) {
 			return true;
@@ -72,28 +155,64 @@ class BotTask extends CakeSocket {
 		return false;
 	}
 
+/**
+ * Join the requested channels
+ *
+ * @param string $nick the nickname to join as
+ * @param mixed channels to join 
+ * @return boolean on result of the join
+ * @access public
+ */
 	function join($nick = null, $channels = array()) {
 		$this->write("NICK " . $this->nick . "\r\n");
 		$this->write("USER " . $this->nick . " " . $this->config['host'] . " botts :" . $this->nick . "\r\n");
+		echo "USER " . $this->nick . " " . $this->config['host'] . " botts :" . $this->nick . "\r\n";
 		foreach ($this->channels as $channel) {
 			$this->write("JOIN " . $channel . "\r\n");
 		}
 		return true;
 	}
 
+/**
+ * Deals with the input from the user
+ *
+ * @return void
+ * @access public
+ */
 	function execute() {
+
+		$channel = ClassRegistry::init('Channel');
+		$channels = $channel->findAll("`enabled` = '1'");
+		$this->channels = Set::extract($channels, "{n}.Channel.name");
+		unset($channel, $channels);
+
 		if ($this->connect()) {
 			while (!feof($this->connection)) {
 
-		        $line =  fgets($this->connection, 128);
+		        $line =  fgets($this->connection, 1024);
 
 				if (stripos($line, 'PING') !== false) {
 					list($ping, $pong) = $this->getParams(':', $line, 2);
-			        $this->out($ping);
-			        if (isset($pong)) {
-						$this->out('PONG');
-			            $this->write("PONG " . $pong);
-			        }
+					//$this->out($ping);
+					if (isset($pong)) {
+						//$this->out('PONG');
+						$this->write("PONG $pong\r\n");
+
+						/*
+						if ($messages = call_user_func($this->callback)) {
+							pr($messages);
+							pr($this->channels);
+							foreach ($messages as $message) {
+								foreach ($this->channels as $channel) {
+									$this->out("\n\nChannel: '$this->channel'\n\n");
+									$this->write("PRIVMSG {$channel} :{$message}\r\n");
+									$this->out("PRIVMSG {$channel} :{$message}");
+								}
+							}
+						}
+						*/
+				        }
+					unset($ping, $pong); //Php is bad about unsetting things since it's usual scope is one execution and this will help keep the program from filling up the computer
 				} elseif ($line{0} === ':') {
 					$params = $this->getParams("\s:", $line, 5);
 
@@ -117,40 +236,66 @@ class BotTask extends CakeSocket {
 								$this->nick = $this->nick . '_';
 								$this->join();
 							break;
-
 							case '353':
 								$this->out('Names on ' . str_replace('=', '', $msg));
 							break;
+							case 'PART':
 
+								$user = ClassRegistry::init('User');
+								$thisUser = $user->findByUsername(substr($params[1], 0, strpos($params[1], "!")));
+								$user->save(array(
+									'User' => array(
+										'id' => $thisUser['User']['id'],
+										'username' => substr($params[1], 0, strpos($params[1], "!")),
+										'date' => date('Y-m-d H:i:s')
+									)
+								));
+								unset($user, $thisUser);
+							break;
 							default:
 								$this->out($msg);
 							break;
 						}
+						unset($cmd, $msg);
 					}
 				} else {
-					$this->out($line);
+					if (trim($line) != "") {
+						$this->out($line);
+					}
 					/*
 					while($cmd = $this->in('enter an irc command')) {
 						// /$this->write($cmd);
 					}
 					*/
 				}
+				unset($line, $params);
 			}
 		}
 		return false;
 	}
 
+/**
+ * Deals with the input from the user
+ *
+ * @param string $msg The inbound message
+ * @return Return the message to send to the user/channel
+ * @access public
+ */
 	function handleMessage($msg) {
 		if (empty($msg)) {
 			return $msg;
 		}
 
 		//Handle commands
-		if ($msg{0} === '!') {
-			$params = $this->getParams("\s!", $msg, 3);
-			switch ($params[1]) {
+		if ($msg{0} === '~') {
+			$params = explode(" ", substr($msg, 1));
+			switch ($params[0]) {
 				case 'seen':
-					return $this->requester . ': You think I have seen someone?';
+					$user = ClassRegistry::init('User');
+					$user = $user->findByUsername($params[1], 'date', 'date desc');
+					if (is_array($user) && count($user)) {
+						return "{$this->requester}: I last saw {$params[1]} at {$user['User']['date']}";
+					}
 				break;
 				case 'help':
 					if (empty($params[2])) {
@@ -158,7 +303,7 @@ class BotTask extends CakeSocket {
 						$this->write("PRIVMSG {$this->requester} :!help <tell> to test one.\r\n");
 						$this->write("PRIVMSG {$this->requester} :!help <number> to limit the number of commands.\r\n");
 					} else {
-						$tell = $params[2];
+						$tell = $params[1];
 						if ($tell === 'all' || is_numeric($tell)) {
 							$limit = 50;
 							if (is_numeric($tell)) {
@@ -177,56 +322,88 @@ class BotTask extends CakeSocket {
 					}
 					return false;
 				break;
-			}
-		}
-		
-		$Tell = ClassRegistry::init('Tell');
-		
-		//return Tell
-		if ($msg{0} === '~') {
-			if (stripos($msg, '~tell') !== false) {
-				$params = $this->getParams("\s", $msg, 4);
-				$user = $params[1];
-				$tell = $params[3];
-			} else {
-				$params = $this->getParams("~", $msg, 2);
-				$user = $this->requester;
-				$tell = $params[1];
-			}
-
-			$message = $Tell->field('message', array('keyword' => $tell));
-			$msg = "{$user}: {$tell} is {$message}";
-			return $msg;
-		}
-		
-		//add Tell to database
-		if (stripos($msg, $this->nick) !== false) {
-			$params = $this->getParams("\s", $msg, 4);
-			if (isset($params[2]) && $params[2] === 'is') {
-				$tell = $params[1];
-				$msg = $this->requester . ": I dont know about {$tell}";
-				$message = $Tell->field('message', array('keyword' => $tell));
-				if ($message) {
-					$msg = $this->requester . ": I thought {$tell} was {$message}";
-				} else {
-					$message = $params[3];
-					if ($Tell->save(array('keyword' => $tell, 'message' => $message))) {
-						$msg = $this->requester . ": Cool, I will remember {$tell}";
+				case 'forget':
+					$Tell = ClassRegistry::init('Tell');
+					if ($Tell->delete($Tell->field('id', array('keyword' => $params[1])))){
+						unset($Tell);
+						return "It's almost like I didn't know a thing about {$params[1]}";
 					}
+					else {
+						unset($Tell);
+						$this->out("There was an error deleting the tell");
+						return "There was an error deleting the tell";
+					}
+				break;
+				default:
+					//Check for a plugin before querying the DB
+					$preAppend = "";
+					if (strtolower(@$params[2]) == "about") { // Squelch since param 2 may not exist and this is faster
+						$user = $params[1];
+						$tell = $params[3];
+						$preAppend = "$user: ";
+					}
+					else {
+						$user = $this->requester;
+						$tell = $params[0];
+					}
+					if (isSet($this->hooks[$tell])) {
+						return $preAppend.call_user_func($this->hooks[$tell], $user);
+					}
+					
+					$Tell = ClassRegistry::init('Tell');
+					$message = $Tell->field('message', array('keyword' => $tell));
+					unset($Tell);
+					if($message) {
+						return "{$user}: {$tell} is {$message}";
+					}
+					else {
+						return "{$user}: I don't know enough about {$tell}";
+					}
+				break;
+			}
+		}
+		elseif (substr($msg, 0, strlen($this->nick)) == $this->nick) {
+			if (strpos($msg, " is")  == strpos($msg, " ", strlen($this->nick) + 2)) {
+				$tell = substr($msg, strpos($msg, " ") + 1, strpos($msg, " is ") - strpos($msg, " ") - 1);
+				$message = substr($msg, strpos($msg, " is ") + 4);
+				//die("msg $msg\n$message");
+				$Tell = ClassRegistry::init('Tell');
+				if (!$Tell->findByKeyword($tell)) {
+					$Tell->create();
+					$Tell->save(array( 'Tell' => array(
+						'keyword' => $tell,
+						'message' => $message
+					)));
+					
+					unset($tell, $Tell, $message, $msg);
+					
+					return "$this->requester, that's good to know";
+				}
+				else {
+					return "$this->requester, I already have a definition for $tell";
 				}
 			}
-			return $msg;
 		}
-		
+
 		//Log Messages
-		pr($msg);
 		$Log = ClassRegistry::init('Log');
 		$Log->create(array('channel' => $this->channel, 'username' => $this->requester, 'text' => $msg));
 		if ($Log->save()) {
 			$this->out('message logged for ' . $this->requester . ' in ' . $this->channel);
 		}
+
+		unset($Log, $msg);
 	}
 
+/**
+ * Does a regex match to handle the message
+ *
+ * @param mixed $regex expression to use
+ * @param string $string to search on
+ * @param integer $offset Offset for the regexp
+ * @return Either the default value, or the user-provided input.
+ * @access public
+ */
 	function getParams($regex, $string, $offset = -1) {
 		return str_replace(array("\r\n", "\n"), '', preg_split("/[{$regex}]+/", $string, $offset));
 	}

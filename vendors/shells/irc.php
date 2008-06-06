@@ -37,13 +37,47 @@
  */
 class IrcShell extends Shell {
 
-	var $tasks = array('Bot');
+	var $tasks = array('Bot', 'SVNCommand', 'BinCommand');
 
+/**
+ * Not implemented
+ *
+ * @return void
+ * @access public
+ */
 	function initialize() {}
 
+/**
+ * Not implemented
+ *
+ * @return void
+ * @access public
+ */
 	function startup() {}
 
+/**
+ * Function that is called by 
+ *
+ * @return void
+ * @access public
+ */
 	function main() {
+
+		foreach($this->tasks as $task) {
+			if (substr($task, -7) == "Command") {
+				$this->Bot->hooks[strtolower(substr($task, 0, -7))] = array($this->{$task}, 'execute');
+			}
+		}
+		$this->Bot->nick = 'AchewBot';
+		$this->Bot->channels = array(
+			"#achew22",
+			"#cakephp",
+		);
+
+		// It might be fun to say something every now and again like say, SVN commits
+		//$this->Bot->setCallback();
 		$this->Bot->execute();
 	}
+	
 }
+?>
