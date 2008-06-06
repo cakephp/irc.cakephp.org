@@ -37,5 +37,9 @@
  * @subpackage	cake.app
  */
 class AppController extends Controller {
+	
+	function beforeFilter() {
+		
+	}
 }
 ?>
