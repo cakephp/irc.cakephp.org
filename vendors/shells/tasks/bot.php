@@ -33,6 +33,7 @@
  * @subpackage	cakebot.vendors.shells.tasks
  */
 App::import('Core', 'Socket');
+App::import('Core', 'Set');
 
 class BotTask extends CakeSocket {
 /**
@@ -298,26 +299,28 @@ class BotTask extends CakeSocket {
 					}
 				break;
 				case 'help':
-					if (empty($params[2])) {
-						$this->write("PRIVMSG {$this->requester} :!help all : to see all the tells.\r\n");
-						$this->write("PRIVMSG {$this->requester} :!help <tell> to test one.\r\n");
-						$this->write("PRIVMSG {$this->requester} :!help <number> to limit the number of commands.\r\n");
+					if (empty($params[1])) {
+						$this->write("PRIVMSG {$this->requester} :~help all : to see all the tells.\r\n");
+						$this->write("PRIVMSG {$this->requester} :~help <number> to limit the number of commands.\r\n");
 					} else {
-						$tell = $params[1];
-						if ($tell === 'all' || is_numeric($tell)) {
-							$limit = 50;
-							if (is_numeric($tell)) {
-								$limit = $tell;
+						if (isset($params[1])) {
+							$tell = $params[1];
+							if ($tell === 'all' || is_numeric($tell)) {
+								$limit = 50;
+								if (is_numeric($tell)) {
+									$limit = $tell;
+								}
+								$Tell = ClassRegistry::init('Tell');
+								$tells = $Tell->find('list', array('fields' => array('Tell.keyword', 'Tell.message'), 'limit' => $limit));
+								//pr($tells);
+								$this->write("PRIVMSG {$this->requester} :The following commands are available:\r\n");
+								$this->write("PRIVMSG {$this->requester} :~<tell> to test it.\r\n");
+								$tells = array_flip($tells);
+								$this->write("PRIVMSG {$this->requester} :".implode($tells, ", ")."\r\n");
+							} else{
+								$message = $Tell->field('message', array('keyword' => $tell));
+								$this->write("PRIVMSG {$this->requester} :{$tell} is {$message}\r\n");
 							}
-							$tells = $Tell->find('list', array('fields' => array('Tell.keyword', 'Tell.message'), 'limit' => $limit));
-							$this->write("PRIVMSG {$this->requester} :The following commands are available:\r\n");
-							$this->write("PRIVMSG {$this->requester} :!help <command> to test it.\r\n");
-							foreach ((array)$tells as $tell => $message) {
-								$this->write("PRIVMSG {$this->requester} :{$tell}\r\n");
-							}
-						} else{
-							$message = $Tell->field('message', array('keyword' => $tell));
-							$this->write("PRIVMSG {$this->requester} :{$tell} is {$message}\r\n");
 						}
 					}
 					return false;
