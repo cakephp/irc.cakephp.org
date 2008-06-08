@@ -241,16 +241,11 @@ class BotTask extends CakeSocket {
 								$this->out('Names on ' . str_replace('=', '', $msg));
 							break;
 							case 'PART':
-
+							case 'JOIN':
 								$user = ClassRegistry::init('User');
 								$thisUser = $user->findByUsername(substr($params[1], 0, strpos($params[1], "!")));
-								$user->save(array(
-									'User' => array(
-										'id' => $thisUser['User']['id'],
-										'username' => substr($params[1], 0, strpos($params[1], "!")),
-										'date' => date('Y-m-d H:i:s')
-									)
-								));
+								$user->id = $thisUser['User']['id'];
+								$user->saveField('date', date('Y-m-d H:i:s'));
 								unset($user, $thisUser);
 							break;
 							default:
@@ -350,8 +345,15 @@ class BotTask extends CakeSocket {
 						$tell = $params[0];
 					}
 					if (isSet($this->hooks[$tell])) {
-						return $preAppend.call_user_func($this->hooks[$tell], $user);
+						if ($preAppend) { //This is an about
+							$extraParams = array_slice($params, 4);
+						}
+						else {
+							$extraParams = array_slice($params, 1);
+						}
+						return $preAppend.call_user_func_array($this->hooks[$tell], am(array($user), $extraParams));
 					}
+					unset ($preAppend);
 					
 					$Tell = ClassRegistry::init('Tell');
 					$message = $Tell->field('message', array('keyword' => $tell));
