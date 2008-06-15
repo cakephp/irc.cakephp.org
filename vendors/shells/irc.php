@@ -37,7 +37,14 @@
  */
 class IrcShell extends Shell {
 
-	var $tasks = array('Bot', 'SVNCommand', 'BinCommand', 'PhpCommand', 'ApiCommand', 'GoogleCommand', 'TracCommand');
+	var $tasks = array('Bot',
+		'SVNCommand',
+		'BinCommand',
+		'PhpCommand',
+		'ApiCommand',
+		'GoogleCommand',
+		'TracCommand'
+	);
 
 /**
  * Not implemented
@@ -56,7 +63,7 @@ class IrcShell extends Shell {
 	function startup() {}
 
 /**
- * Function that is called by 
+ * Function that is called by
  *
  * @return void
  * @access public
@@ -68,9 +75,8 @@ class IrcShell extends Shell {
 				$this->Bot->hooks[strtolower(substr($task, 0, -7))] = array($this->{$task}, 'execute');
 			}
 		}
-		$this->Bot->nick = 'AchewBot';
+		$this->Bot->nick = 'CakeBot';
 		$this->Bot->channels = array(
-			"#achew22",
 			"#cakephp",
 		);
 
@@ -78,6 +84,6 @@ class IrcShell extends Shell {
 		//$this->Bot->setCallback();
 		$this->Bot->execute();
 	}
-	
+
 }
 ?>
