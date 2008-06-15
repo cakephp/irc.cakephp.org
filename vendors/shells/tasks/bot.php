@@ -43,7 +43,7 @@ class BotTask extends CakeSocket {
  * @access public
  */
 	var $nick = 'CakeBot';
-	
+
 /**
  * Internal channel holder
  *
@@ -71,7 +71,7 @@ class BotTask extends CakeSocket {
 	);
 
 /**
- * Default connection paramiters 
+ * Default connection paramiters
  *
  * @var string
  * @access public
@@ -160,7 +160,7 @@ class BotTask extends CakeSocket {
  * Join the requested channels
  *
  * @param string $nick the nickname to join as
- * @param mixed channels to join 
+ * @param mixed channels to join
  * @return boolean on result of the join
  * @access public
  */
@@ -219,7 +219,7 @@ class BotTask extends CakeSocket {
 
 						$cmd = $params[2];
 						$msg = @$params[4];
-						
+
 						switch ($cmd) {
 							case 'PRIVMSG':
 								$this->channel = $params[3];
@@ -350,7 +350,7 @@ class BotTask extends CakeSocket {
 						return $preAppend.call_user_func_array($this->hooks[$tell], am(array($user), $extraParams));
 					}
 					unset ($preAppend);
-					
+
 					$Tell = ClassRegistry::init('Tell');
 					$message = $Tell->field('message', array('keyword' => $tell));
 					unset($Tell);
@@ -377,9 +377,9 @@ class BotTask extends CakeSocket {
 						'keyword' => $tell,
 						'message' => $message
 					)));
-					
+
 					unset($tell, $Tell, $message, $msg);
-					
+
 					return "$this->requester, that's good to know";
 				}
 				else {
