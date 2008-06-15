@@ -31,7 +31,8 @@
  *
  * @package		cakebot
  * @subpackage	cakebot.controllers
- */class ChannelsController extends AppController {
+ */
+class ChannelsController extends AppController {
 
 	var $name = 'Channels';
 	var $helpers = array('Html', 'Form');
