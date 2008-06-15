@@ -72,8 +72,8 @@ class SVNCommandTask extends Object {
 
 			$args = func_get_args();
 			$log = $this->svn_log_limit ( "https://svn.cakephp.org/repo/branches/1.2.x.x/", $args[1] );
-			$lastRevision = $log[0]['rev'];
-			if ($lastRevision) {
+			if ($log) {
+				$lastRevision = $log[0]['rev'];
 				return "Revision {$log[0]['rev']} ({$log[0]['author']}): {$log[0]['msg']}";
 			}
 			else {
