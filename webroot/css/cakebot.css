@@ -489,3 +489,17 @@ div.cake-code-dump span.code-highlight {
 	background-color: #FFFF00;
 	padding: 4px;
 }
+/*
+Log style information
+*/
+.log-text {
+	text-align: left;
+}
+.logs th.at, .logs th.actions,.logs th.channel, .logs th.username {
+	width: 33px;
+}
+
+.logs th.text {
+	text-align: left;
+	border-left: 5px;
+}

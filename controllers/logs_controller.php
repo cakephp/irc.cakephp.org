@@ -35,51 +35,29 @@
 class LogsController extends AppController {
 
 	var $name = 'Logs';
-	var $helpers = array('Html', 'Form');
+	var $helpers = array('Html', 'Form', 'Time');
+	var $uses = array('Log', 'Channel');
+
+	var $paginate = array(
+		'limit' => 100,
+		'order' => array(
+			'Log.created' => 'asc'
+		)
+	);
+
+	function view($channel = null) {
+		$this->Log->recursive = 0;
+		$this->set('logs', $this->paginate('Log', array('channel' => "#$channel")));
+	}
 
 	function index() {
-		$this->Log->recursive = 0;
-		$this->set('logs', $this->paginate());
+		$this->Channel->recursive = 0;
+		$this->set('channels', $this->Channel->findAll());
 	}
 
-	function view($id = null) {
-		if (!$id) {
-			$this->Session->setFlash(__('Invalid Log.', true));
-			$this->redirect(array('action'=>'index'));
-		}
-		$this->set('log', $this->Log->read(null, $id));
-	}
-
-	function add() {
-		if (!empty($this->data)) {
-			$this->Log->create();
-			if ($this->Log->save($this->data)) {
-				$this->Session->setFlash(__('The Log has been saved', true));
-				$this->redirect(array('action'=>'index'));
-			} else {
-				$this->Session->setFlash(__('The Log could not be saved. Please, try again.', true));
-			}
-		}
-	}
-
-	function edit($id = null) {
-		if (!$id && empty($this->data)) {
-			$this->Session->setFlash(__('Invalid Log', true));
-			$this->redirect(array('action'=>'index'));
-		}
-		if (!empty($this->data)) {
-			if ($this->Log->save($this->data)) {
-				$this->Session->setFlash(__('The Log has been saved', true));
-				$this->redirect(array('action'=>'index'));
-			} else {
-				$this->Session->setFlash(__('The Log could not be saved. Please, try again.', true));
-			}
-		}
-		if (empty($this->data)) {
-			$this->data = $this->Log->read(null, $id);
-		}
-	}
-
+/*
+	// at some point we may want an administrative delete feature for when people accidentaly put things up that they really don't want
+	// Something like a "report this post" which makes it disapear then an administrative decision is made later
 	function delete($id = null) {
 		if (!$id) {
 			$this->Session->setFlash(__('Invalid id for Log', true));
@@ -90,6 +68,6 @@ class LogsController extends AppController {
 			$this->redirect(array('action'=>'index'));
 		}
 	}
-
+*/
 }
 ?>

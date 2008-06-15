@@ -68,9 +68,23 @@ class SVNCommandTask extends Object {
  * @access public
  */
 	function execute() {
-		$log = $this->svn_log_limit ( "https://svn.cakephp.org/repo/branches/1.2.x.x/" );
-		$lastRevision = $log[0]['rev'];
-		return "Revision {$log[0]['rev']} ({$log[0]['author']}): {$log[0]['msg']}";
+		if (func_num_args() > 1) {
+
+			$args = func_get_args();
+			$log = $this->svn_log_limit ( "https://svn.cakephp.org/repo/branches/1.2.x.x/", $args[1] );
+			$lastRevision = $log[0]['rev'];
+			if ($lastRevision) {
+				return "Revision {$log[0]['rev']} ({$log[0]['author']}): {$log[0]['msg']}";
+			}
+			else {
+				return "Revision $args[1] is not a valid revision";
+			}
+		}
+		else {
+			$log = $this->svn_log_limit ( "https://svn.cakephp.org/repo/branches/1.2.x.x/" );
+			$lastRevision = $log[0]['rev'];
+			return "Revision {$log[0]['rev']} ({$log[0]['author']}): {$log[0]['msg']}";
+		}
 	}
 
 /**
@@ -80,10 +94,11 @@ class SVNCommandTask extends Object {
  * @return mixed array of svn_log variables
  * @access public
  */
-	function svn_log_limit($repos_url) {
+	function svn_log_limit($repos_url, $rev = null) {
 		$limit = 1;
 		// -q flag used to prevent server from sending log messages
-		$output = shell_exec("svn log -q --limit $limit $repos_url");
+		$revision = ($rev == null ? "" : "-r $rev");
+		$output = shell_exec("svn log -q {$revision} --limit $limit $repos_url");
 		preg_match_all('/^r(\d+) /m', $output, $matches);
 		$ret = array();
 		foreach ($matches[1] as $rev) {

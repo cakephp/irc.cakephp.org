@@ -37,7 +37,7 @@
  */
 class IrcShell extends Shell {
 
-	var $tasks = array('Bot', 'SVNCommand', 'BinCommand', 'PhpCommand', 'ApiCommand', 'GoogleCommand');
+	var $tasks = array('Bot', 'SVNCommand', 'BinCommand', 'PhpCommand', 'ApiCommand', 'GoogleCommand', 'TracCommand');
 
 /**
  * Not implemented

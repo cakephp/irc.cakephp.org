@@ -182,6 +182,7 @@ class BotTask extends CakeSocket {
  */
 	function execute() {
 
+		//Pull up all the channels
 		$channel = ClassRegistry::init('Channel');
 		$channels = $channel->findAll("`enabled` = '1'");
 		$this->channels = Set::extract($channels, "{n}.Channel.name");
@@ -189,16 +190,13 @@ class BotTask extends CakeSocket {
 
 		if ($this->connect()) {
 			while (!feof($this->connection)) {
-
 		        $line =  fgets($this->connection, 1024);
-
 				if (stripos($line, 'PING') !== false) {
 					list($ping, $pong) = $this->getParams(':', $line, 2);
-					//$this->out($ping);
 					if (isset($pong)) {
-						//$this->out('PONG');
 						$this->write("PONG $pong\r\n");
 
+						// Now that we have the pong, maybe put a callback function here ot maybe output regular messages
 						/*
 						if ($messages = call_user_func($this->callback)) {
 							pr($messages);
@@ -220,16 +218,18 @@ class BotTask extends CakeSocket {
 					if (isset($params[2])) {
 
 						$cmd = $params[2];
-						$msg = $params[4];
+						$msg = @$params[4];
 						
 						switch ($cmd) {
 							case 'PRIVMSG':
 								$this->channel = $params[3];
 								$user = $this->getParams("!", $params[1], 3);
 								$this->requester = $user[0];
-								$this->out($msg);
-								if($msg = $this->handleMessage($msg)) {
-									$this->write("PRIVMSG {$this->channel} :{$msg}\r\n");
+								if ($this->requester != "freenode-connect") {
+									$this->out(date('H:i:s')." $this->requester: $msg");
+									if($msg = $this->handleMessage($msg)) {
+										$this->write("PRIVMSG {$this->channel} :{$msg}\r\n");
+									}
 								}
 							break;
 							case '433': //Nick already registerd
@@ -258,11 +258,6 @@ class BotTask extends CakeSocket {
 					if (trim($line) != "") {
 						$this->out($line);
 					}
-					/*
-					while($cmd = $this->in('enter an irc command')) {
-						// /$this->write($cmd);
-					}
-					*/
 				}
 				unset($line, $params);
 			}
@@ -311,8 +306,8 @@ class BotTask extends CakeSocket {
 								$this->write("PRIVMSG {$this->requester} :The following commands are available:\r\n");
 								$this->write("PRIVMSG {$this->requester} :~<tell> to test it.\r\n");
 								$tells = array_flip($tells);
-								$this->write("PRIVMSG {$this->requester} :".implode($tells, ", ")."\r\n");
-							} else{
+								$this->write("PRIVMSG {$this->requester} :forget, seen, ".implode($tells, ", ")."\r\n");
+							} else {
 								$message = $Tell->field('message', array('keyword' => $tell));
 								$this->write("PRIVMSG {$this->requester} :{$tell} is {$message}\r\n");
 							}
@@ -322,7 +317,7 @@ class BotTask extends CakeSocket {
 				break;
 				case 'forget':
 					$Tell = ClassRegistry::init('Tell');
-					if ($Tell->delete($Tell->field('id', array('keyword' => $params[1])))){
+					if ($Tell->delete($Tell->field('id', array('keyword' => $params[1])))) {
 						unset($Tell);
 						return "It's almost like I didn't know a thing about {$params[1]}";
 					}
@@ -332,6 +327,7 @@ class BotTask extends CakeSocket {
 						return "There was an error deleting the tell";
 					}
 				break;
+				// There are no built in functions that they want, check the plugins and the tell database
 				default:
 					//Check for a plugin before querying the DB
 					$preAppend = "";
@@ -358,7 +354,7 @@ class BotTask extends CakeSocket {
 					$Tell = ClassRegistry::init('Tell');
 					$message = $Tell->field('message', array('keyword' => $tell));
 					unset($Tell);
-					if($message) {
+					if ($message) {
 						return "{$user}: {$tell} is {$message}";
 					}
 					else {
@@ -367,7 +363,9 @@ class BotTask extends CakeSocket {
 				break;
 			}
 		}
-		elseif (substr($msg, 0, strlen($this->nick)) == $this->nick) {
+		// Catch messages that have been directed to this bot's nick
+		// This could be a definition
+		elseif (strtolower(substr($msg, 0, strlen($this->nick))) == strtolower($this->nick)) {
 			if (strpos($msg, " is")  == strpos($msg, " ", strlen($this->nick) + 2)) {
 				$tell = substr($msg, strpos($msg, " ") + 1, strpos($msg, " is ") - strpos($msg, " ") - 1);
 				$message = substr($msg, strpos($msg, " is ") + 4);
@@ -390,11 +388,11 @@ class BotTask extends CakeSocket {
 			}
 		}
 
-		//Log Messages
+		//Log Messages that werent action commands
 		$Log = ClassRegistry::init('Log');
-		$Log->create(array('channel' => $this->channel, 'username' => $this->requester, 'text' => $msg));
-		if ($Log->save()) {
-			$this->out('message logged for ' . $this->requester . ' in ' . $this->channel);
+		$Log->create(array('channel' => $this->channel, 'username' => $this->requester, 'text' => $msg, 'created' => date('Y-m-d H:i:s')));
+		if (!$Log->save()) {
+			$this->out('Error loggin message for ' . $this->requester . ' in ' . $this->channel);
 		}
 
 		unset($Log, $msg);

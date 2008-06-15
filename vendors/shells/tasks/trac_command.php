@@ -26,14 +26,15 @@
  * @license			http://www.opensource.org/licenses/mit-license.php The MIT License
  */
 /**
- * Give links to the users for the CakePHP API 
+ * Sample CommandTask for CakeBot.v1.0.
+ * Allow ~trac #ticketnumber to work
  *
  *
  * @package		cakebot
  * @subpackage	cakebot.vendors.shells.tasks
  */
 
-class ApiCommandTask extends Object {
+class TracCommandTask extends Object {
 
 /**
  * Not implemented
@@ -68,15 +69,14 @@ class ApiCommandTask extends Object {
  */
 	function execute() {
 		if (func_num_args() > 1) {
-			$ClassName = implode(array_splice(func_get_args(), 1), "_");
+			$args = func_get_args();
+			$searchString = str_replace("#", "", $args[1]);
+			$url =  sprintf( "https://trac.cakephp.org/ticket/%s", urlencode($searchString));
 	
-			$url =  sprintf( "http://api.cakephp.org/class_%s.html", Inflector::underscore($ClassName));
-			$url = str_replace("__", "_", $url);
-	
-			return "This API may have this at $url";
+			return "To view this ticket go here: $url";
 		}
 		else {
-			return "This API is an incredible resource which you can find at http://api.cakephp.org";
+			return "CakePHP development information can be found at https://trac.cakephp.org";
 		}
 	}
 }

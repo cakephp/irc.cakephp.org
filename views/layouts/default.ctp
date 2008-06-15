@@ -51,15 +51,15 @@
 			<ul class="navigation">
 				<li>
 					<?php $css_class = ($this->name == 'Channels') ? 'on' : null;?>
-					<?php echo $html->link('Channels', array('controller' => 'channels'), array('class'=>$css_class)); ?>
+					<?php echo $html->link('Channels', array('controller' => 'channels', 'action' => 'index'), array('class'=>$css_class)); ?>
 				</li>
 				<li>
 					<?php $css_class = ($this->name == 'Logs') ? 'on' : null;?>
-					<?php echo $html->link('Logs', array('controller' => 'logs'), array('class'=>$css_class)); ?>
+					<?php echo $html->link('Logs', array('controller' => 'logs', 'action' => 'index'), array('class'=>$css_class)); ?>
 				</li>
 				<li>
 					<?php $css_class = ($this->name == 'Tells') ? 'on' : null;?>
-					<?php echo $html->link('Tells', array('controller' => 'tells'), array('class'=>$css_class)); ?>
+					<?php echo $html->link('Tells', array('controller' => 'tells', 'action' => 'index'), array('class'=>$css_class)); ?>
 				</li>
 			</ul>
 		</div>
