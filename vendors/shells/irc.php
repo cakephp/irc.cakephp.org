@@ -75,10 +75,12 @@ class IrcShell extends Shell {
 				$this->Bot->hooks[strtolower(substr($task, 0, -7))] = array($this->{$task}, 'execute');
 			}
 		}
-		$this->Bot->nick = 'CakeBot';
-		$this->Bot->channels = array(
-			"#cakephp",
-		);
+
+		if (isSet($this->args[0])) {
+			$this->Bot->nick = $this->args[0];
+		} else {
+			$this->Bot->nick = 'CakeBot';
+		}
 
 		// It might be fun to say something every now and again like say, SVN commits
 		//$this->Bot->setCallback();

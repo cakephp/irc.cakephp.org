@@ -68,22 +68,27 @@ class SVNCommandTask extends Object {
  * @access public
  */
 	function execute() {
-		if (func_num_args() > 1) {
-
-			$args = func_get_args();
-			$log = $this->svn_log_limit ( "https://svn.cakephp.org/repo/branches/1.2.x.x/", $args[1] );
-			if ($log) {
+		if (function_exists("svn_log")) {
+			if (func_num_args() > 1) {
+	
+				$args = func_get_args();
+				$log = $this->svn_log_limit ( "https://svn.cakephp.org/repo/branches/1.2.x.x/", $args[1] );
+				if ($log) {
+					$lastRevision = $log[0]['rev'];
+					return "Revision {$log[0]['rev']} ({$log[0]['author']}): {$log[0]['msg']}";
+				}
+				else {
+					return "Revision $args[1] is not a valid revision";
+				}
+			}
+			else {
+				$log = $this->svn_log_limit ( "https://svn.cakephp.org/repo/branches/1.2.x.x/" );
 				$lastRevision = $log[0]['rev'];
 				return "Revision {$log[0]['rev']} ({$log[0]['author']}): {$log[0]['msg']}";
 			}
-			else {
-				return "Revision $args[1] is not a valid revision";
-			}
 		}
 		else {
-			$log = $this->svn_log_limit ( "https://svn.cakephp.org/repo/branches/1.2.x.x/" );
-			$lastRevision = $log[0]['rev'];
-			return "Revision {$log[0]['rev']} ({$log[0]['author']}): {$log[0]['msg']}";
+			return "svn is https://svn.cakephp.org/repo/";
 		}
 	}
 
