@@ -1,6 +1,6 @@
 <?php 
 /* SVN FILE: $Id$ */
-/* Cakebot schema generated on: 2008-06-08 07:06:55 : 1212933535*/
+/* Cakebot schema generated on: 2008-06-19 00:06:52 : 1213856932*/
 class CakebotSchema extends CakeSchema {
 	var $name = 'Cakebot';
 
