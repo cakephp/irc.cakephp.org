@@ -20,9 +20,9 @@
  * @package			$TM_DIRECTORY
  * @subpackage		$TM_DIRECTORY
  * @since			$TM_DIRECTORY v (1.0)
- * @version			$Revision: 33 $
- * @modifiedby		$LastChangedBy: gwoo $
- * @lastmodified	$Date: 2008-06-14 19:18:15 -0700 (Sat, 14 Jun 2008) $
+ * @version			$Revision$
+ * @modifiedby		$LastChangedBy$
+ * @lastmodified	$Date$
  * @license			http://www.opensource.org/licenses/mit-license.php The MIT License
  */
 class Channel extends AppModel {
