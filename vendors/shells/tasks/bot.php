@@ -243,9 +243,14 @@ class BotTask extends CakeSocket {
 							case 'PART':
 							case 'JOIN':
 								$user = ClassRegistry::init('User');
-								$thisUser = $user->findByUsername(substr($params[1], 0, strpos($params[1], "!")));
-								$user->id = $thisUser['User']['id'];
-								$user->saveField('date', date('Y-m-d H:i:s'));
+								$userName = substr($params[1], 0, strpos($params[1], "!"));
+								$this->out("username".$userName);
+								$thisUser = $user->findByUsername($userName);
+								$thisUser['User']['username'] = $userName;
+								$thisUser['User']['date'] = date('Y-m-d H:i:s');
+								if ($user->save($thisUser)) {
+									$this->out("Saved {$userName}'s state change");
+								}
 								unset($user, $thisUser);
 							break;
 							default:
@@ -286,6 +291,9 @@ class BotTask extends CakeSocket {
 					$user = $user->findByUsername($params[1], 'date', 'date desc');
 					if (is_array($user) && count($user)) {
 						return "{$this->requester}: I last saw {$params[1]} at {$user['User']['date']}";
+					}
+					else {
+						return "{$this->requester}: I haven't seen {$params[1]} in a while";
 					}
 				break;
 				case 'help':
