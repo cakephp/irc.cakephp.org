@@ -25,13 +25,9 @@
  * @lastmodified	$Date$
  * @license			http://www.opensource.org/licenses/mit-license.php The MIT License
  */
-class Log extends AppModel {
+class User extends AppModel {
 
-	var $name = 'Log';
-	/*var $validate = array(
-		'channel' => array('alphaNumeric'),
-		'username' => array('alphaNumeric')
-	);*/
+	var $name = 'User';
 
 }
 ?>
