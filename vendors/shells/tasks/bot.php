@@ -288,7 +288,7 @@ class BotTask extends CakeSocket {
 		}
 
 		//Handle commands
-		if ($msg{0} === '~') {
+		if (($msg{0} === '~') || ($msg{0} === '!')) {
 			$params = explode(" ", substr($msg, 1));
 			switch ($params[0]) {
 				case 'seen':
