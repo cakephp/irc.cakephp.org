@@ -35,7 +35,8 @@
 /**
  * These defines should only be edited if you have cake installed in
  * a directory layout other than the way it is distributed.
- * Each define has a commented line of code that explains what you would change.
+ * Each define has a commented line of code t
+///////////////////////////////hat explains what you would change.
  */
 	if (!defined('ROOT')) {
 		//define('ROOT', 'FULL PATH TO DIRECTORY WHERE APP DIRECTORY IS LOCATED. DO NOT ADD A TRAILING DIRECTORY SEPARATOR');
@@ -57,7 +58,6 @@
 	}
 ///////////////////////////////
 //DO NOT EDIT BELOW THIS LINE//
-///////////////////////////////
 	if (!defined('WEBROOT_DIR')) {
 		define('WEBROOT_DIR', basename(dirname(__FILE__)));
 	}

@@ -244,12 +244,17 @@ class BotTask extends CakeSocket {
 							case 'JOIN':
 								$user = ClassRegistry::init('User');
 								$userName = substr($params[1], 0, strpos($params[1], "!"));
-								$this->out("username".$userName);
 								$thisUser = $user->findByUsername($userName);
+								if(empty($thisUser)) {
+									$user->create();
+								}
 								$thisUser['User']['username'] = $userName;
 								$thisUser['User']['date'] = date('Y-m-d H:i:s');
 								if ($user->save($thisUser)) {
 									$this->out("Saved {$userName}'s state change");
+								}
+								else {
+									$this->out("Unable to save {$userName}'s state change");
 								}
 								unset($user, $thisUser);
 							break;
