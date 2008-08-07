@@ -35,7 +35,7 @@
 ?>
 <?php   // to someone wants to add url highlighting, this is my standard regular expression for urls ^((ht|f)tp(s?)\:\/\/|~/|/)?([\w]+:\w+@)?([a-zA-Z]{1}([\w\-]+\.)+([\w]{2,5}))(:[\d]{1,5})?((/?\w+/)+|/?)(\w+\.[\w]{3,4})?((\?\w+=\w+)?(&\w+=\w+)*)? ?>
 <div class="logs index">
-<h2><?php __('Logs');?></h2>
+<h2><?php echo '#' .$this->passedArgs[0] . ' ' . __('Logs', true);?></h2>
 <p>
 <?php $paginator->options(array('url' => $this->passedArgs)); ?>
 
@@ -47,7 +47,6 @@ echo $paginator->counter(array(
 <table cellpadding="0" cellspacing="0">
 <tr>
 	<th class="actions"><?php __('Report');?></th>
-	<th class="channel"><?php echo $paginator->sort('channel');?></th>
 	<th class="at"><?php echo $paginator->sort('At', 'created');?></th>
 	<th class="username"><?php echo $paginator->sort('username');?></th>
 	<th class="text"><?php echo $paginator->sort('text');?></th>
@@ -65,16 +64,13 @@ foreach ($logs as $log):
 			<?php echo $html->link(__('Report', true), array('action'=>'report', $log['Log']['id']), null, sprintf(__('Are you sure you want to report this message?', true))); ?>
 		</td>
 		<td>
-			<?php echo $log['Log']['channel']; ?>
-		</td>
-		<td>
-			<?php echo $time->format("H:i:s", $log['Log']['created']); ?>
+			<?php echo $time->format("D H:i:s", $log['Log']['created']); ?>
 		</td>
 		<td>
 			<?php echo $log['Log']['username']; ?>
 		</td>
 		<td class="log-text">
-			<?php echo $log['Log']['text']; ?>
+			<?php echo $html->clean($log['Log']['text']); ?>
 		</td>
 	</tr>
 <?php endforeach; ?>
