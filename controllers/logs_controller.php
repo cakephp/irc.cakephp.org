@@ -41,18 +41,18 @@ class LogsController extends AppController {
 	var $paginate = array(
 		'limit' => 100,
 		'order' => array(
-			'Log.created' => 'asc'
+			'Log.created' => 'DESC'
 		)
 	);
+
+	function index() {
+		$this->Channel->recursive = 0;
+		$this->set('channels', $this->Channel->find('all'));
+	}
 
 	function view($channel = null) {
 		$this->Log->recursive = 0;
 		$this->set('logs', $this->paginate('Log', array('channel' => "#$channel")));
-	}
-
-	function index() {
-		$this->Channel->recursive = 0;
-		$this->set('channels', $this->Channel->findAll());
 	}
 
 /*
