@@ -76,7 +76,7 @@ class IrcShell extends Shell {
 			}
 		}
 
-		if (isSet($this->args[0])) {
+		if (isset($this->args[0])) {
 			$this->Bot->nick = $this->args[0];
 		} else {
 			$this->Bot->nick = 'CakeBot';

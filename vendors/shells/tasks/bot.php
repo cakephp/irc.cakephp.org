@@ -146,7 +146,7 @@ class BotTask extends CakeSocket {
 			return true;
 		}
 		if (parent::connect()) {
-			if ($this->join()) {
+			if ($this->login() && $this->join()) {
 				return true;
 			}
 		} else {
@@ -155,7 +155,6 @@ class BotTask extends CakeSocket {
 		}
 		return false;
 	}
-
 /**
  * Join the requested channels
  *
@@ -164,12 +163,34 @@ class BotTask extends CakeSocket {
  * @return boolean on result of the join
  * @access public
  */
-	function join($nick = null, $channels = array()) {
-		$this->write("NICK " . $this->nick . "\r\n");
-		$this->write("USER " . $this->nick . " " . $this->config['host'] . " botts :" . $this->nick . "\r\n");
-		echo "USER " . $this->nick . " " . $this->config['host'] . " botts :" . $this->nick . "\r\n";
-		foreach ($this->channels as $channel) {
-			$this->write("JOIN " . $channel . "\r\n");
+	function login($nick = null, $password = null) {
+		if ($password === null) {
+			$nick = $this->nick;
+		}
+		$this->write("NICK {$nick}\r\n");
+		$this->write("USER {$nick} {$this->config['host']} botts : {$nick}\r\n");
+		return true;
+	}
+/**
+ * Join the requested channels
+ *
+ * @param string $nick the nickname to join as
+ * @param mixed channels to join
+ * @return boolean on result of the join
+ * @access public
+ */
+	function join($channels = array()) {
+		if (!empty($channels)) {
+			$channels = array_merge($this->channels, $channels);
+		} else {
+			$channels = $this->channels;
+		}
+		foreach ($channels as $channel => $password) {
+			if (is_numeric($channel)) {
+				$channel = $password;
+				$password = null;
+			}
+			$this->write("JOIN {$channel} {$password}\r\n");
 		}
 		return true;
 	}
@@ -307,11 +328,11 @@ class BotTask extends CakeSocket {
 						$this->write("PRIVMSG {$this->requester} :~help <number> to limit the number of commands.\r\n");
 					} else {
 						if (isset($params[1])) {
-							$tell = $params[1];
-							if ($tell === 'all' || is_numeric($tell)) {
+							$input = $params[1];
+							if ($input === 'all' || is_numeric($tell)) {
 								$limit = 50;
-								if (is_numeric($tell)) {
-									$limit = $tell;
+								if (is_numeric($input)) {
+									$limit = $input;
 								}
 								$Tell = ClassRegistry::init('Tell');
 								$tells = $Tell->find('list', array('fields' => array('Tell.keyword', 'Tell.message'), 'limit' => $limit));
@@ -321,7 +342,7 @@ class BotTask extends CakeSocket {
 								$tells = array_flip($tells);
 								$this->write("PRIVMSG {$this->requester} :forget, seen, ".implode($tells, ", ")."\r\n");
 							} else {
-								$message = $Tell->field('message', array('keyword' => $tell));
+								$message = $Tell->field('message', array('keyword' => $input));
 								$this->write("PRIVMSG {$this->requester} :{$tell} is {$message}\r\n");
 							}
 						}
