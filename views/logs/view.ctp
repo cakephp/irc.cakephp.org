@@ -47,7 +47,7 @@ echo $paginator->counter(array(
 <table cellpadding="0" cellspacing="0">
 <tr>
 	<th class="actions"><?php __('Report');?></th>
-	<th class="at"><?php echo $paginator->sort('At', 'created');?></th>
+	<th class="at"><nobr><?php echo $paginator->sort('At', 'created');?></nobr></th>
 	<th class="username"><?php echo $paginator->sort('username');?></th>
 	<th class="text"><?php echo $paginator->sort('text');?></th>
 </tr>
@@ -63,7 +63,7 @@ foreach ($logs as $log):
 		<td class="actions">
 			<?php echo $html->link(__('Report', true), array('action'=>'report', $log['Log']['id']), null, sprintf(__('Are you sure you want to report this message?', true))); ?>
 		</td>
-		<td>
+		<td nowrap="true">
 			<?php echo $time->format("D H:i:s", $log['Log']['created']); ?>
 		</td>
 		<td>

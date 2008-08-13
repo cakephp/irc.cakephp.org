@@ -308,9 +308,14 @@ class BotTask extends CakeSocket {
 			return $msg;
 		}
 
+		if (!$this->log(array('channel' => $this->channel, 'username' => $this->requester, 'text' => $msg))) {
+			$this->out('Error loggin message for ' . $this->requester . ' in ' . $this->channel);
+		}
+
 		//Handle commands
-		if (($msg{0} === '~') || ($msg{0} === '!')) {
-			$params = explode(" ", substr($msg, 1));
+		if ((($msg{0} === '~') || ($msg{0} === '!')) || ( (strpos($msg, " !") !== false) || (strpos($msg, " ~") !== false) )) {
+			//create an array of the paramiters from the call offset by the location of the first ~
+			$params = explode(" ", substr($msg, strpos($msg, "~") + 1));
 			switch ($params[0]) {
 				case 'seen':
 					$user = ClassRegistry::init('User');
@@ -422,14 +427,20 @@ class BotTask extends CakeSocket {
 			}
 		}
 
-		//Log Messages that werent action commands
-		$Log = ClassRegistry::init('Log');
-		$Log->create(array('channel' => $this->channel, 'username' => $this->requester, 'text' => $msg, 'created' => date('Y-m-d H:i:s')));
-		if (!$Log->save()) {
-			$this->out('Error loggin message for ' . $this->requester . ' in ' . $this->channel);
-		}
+		unset($msg);
+	}
 
-		unset($Log, $msg);
+/**
+ * 
+ * 
+ */
+	function log($input = array()) {
+		if (!isset($input['created'])) {
+			$input['created'] = date('Y-m-d H:i:s');
+		}
+		$Log = ClassRegistry::init('Log');
+		$Log->create($input);
+		return $Log->save();
 	}
 
 /**
