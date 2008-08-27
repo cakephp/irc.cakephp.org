@@ -249,6 +249,9 @@ class BotTask extends CakeSocket {
 								if ($this->requester != "freenode-connect") {
 									$this->out(date('H:i:s')." $this->requester: $msg");
 									if($msg = $this->handleMessage($msg)) {
+										if($this->channel == $this->nick){
+											$this->channel = $this->requester;
+										}
 										$this->write("PRIVMSG {$this->channel} :{$msg}\r\n");
 									}
 								}
