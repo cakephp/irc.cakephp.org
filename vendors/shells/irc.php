@@ -42,6 +42,7 @@ class IrcShell extends Shell {
 		'BinCommand',
 		'PhpCommand',
 		'ApiCommand',
+		'ApilookupCommand',
 		'GoogleCommand',
 		'TracCommand'
 	);

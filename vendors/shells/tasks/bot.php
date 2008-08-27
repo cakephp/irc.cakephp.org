@@ -205,7 +205,7 @@ class BotTask extends CakeSocket {
 
 		//Pull up all the channels
 		$channel = ClassRegistry::init('Channel');
-		$channels = $channel->findAll("`enabled` = '1'");
+		$channels = $channel->find('all', array('conditions' => array('Channel.enabled' => 1)));
 		$this->channels = Set::extract($channels, "{n}.Channel.name");
 		unset($channel, $channels);
 
