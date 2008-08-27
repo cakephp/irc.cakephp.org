@@ -26,7 +26,6 @@
  * @license			http://www.opensource.org/licenses/mit-license.php The MIT License
  */
 class Tell extends AppModel {
-
 	var $name = 'Tell';
 
 }

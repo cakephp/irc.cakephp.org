@@ -334,12 +334,12 @@ class BotTask extends CakeSocket {
 					} else {
 						if (isset($params[1])) {
 							$input = $params[1];
-							if ($input === 'all' || is_numeric($tell)) {
+							$Tell = ClassRegistry::init('Tell');
+							if ($input === 'all' || is_numeric($input)) {
 								$limit = 50;
 								if (is_numeric($input)) {
 									$limit = $input;
 								}
-								$Tell = ClassRegistry::init('Tell');
 								$tells = $Tell->find('list', array('fields' => array('Tell.keyword', 'Tell.message'), 'limit' => $limit));
 								//pr($tells);
 								$this->write("PRIVMSG {$this->requester} :The following commands are available:\r\n");
@@ -348,7 +348,7 @@ class BotTask extends CakeSocket {
 								$this->write("PRIVMSG {$this->requester} :forget, seen, ".implode($tells, ", ")."\r\n");
 							} else {
 								$message = $Tell->field('message', array('keyword' => $input));
-								$this->write("PRIVMSG {$this->requester} :{$tell} is {$message}\r\n");
+								$this->write("PRIVMSG {$this->requester} :{$input} is {$message}\r\n");
 							}
 						}
 					}
