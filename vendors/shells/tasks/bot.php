@@ -351,7 +351,11 @@ class BotTask extends CakeSocket {
 								$this->write("PRIVMSG {$this->requester} :forget, seen, ".implode($tells, ", ")."\r\n");
 							} else {
 								$message = $Tell->field('message', array('keyword' => $input));
-								$this->write("PRIVMSG {$this->requester} :{$input} is {$message}\r\n");
+								if(!empty($message)){
+									$this->write("PRIVMSG {$this->requester} :{$input} is {$message}\r\n");
+								} else {
+									$this->write("PRIVMSG {$this->requester} :I don't know enough about {$input}\r\n");
+								}
 							}
 						}
 					}
