@@ -92,6 +92,11 @@ class BotTask extends CakeSocket {
 	var $callback = null;
 
 /**
+ * Contains the names of all active users inside of sub array's for each channel
+ */
+	var $activeUsers = array();
+
+/**
  * Associative array listing all the callback functions (using call_user_func) with their key as the function's name
  *
  * @var array
@@ -109,6 +114,7 @@ class BotTask extends CakeSocket {
 		parent::__construct($this->config);
 		$this->Dispatch =& $dispatcher;
 	}
+
 
 /**
  * Not implemented
@@ -191,6 +197,7 @@ class BotTask extends CakeSocket {
 				$password = null;
 			}
 			$this->write("JOIN {$channel} {$password}\r\n");
+			$this->activeUsers[$channel] = array();
 		}
 		return true;
 	}
@@ -210,8 +217,8 @@ class BotTask extends CakeSocket {
 		unset($channel, $channels);
 
 		if ($this->connect()) {
-			while (!feof($this->connection)) {
-		        $line =  fgets($this->connection, 1024);
+			while (is_resource($this->connection) && !feof($this->connection)) {
+		        	$line =  fgets($this->connection, 1024);
 				if (stripos($line, 'PING') !== false) {
 					list($ping, $pong) = $this->getParams(':', $line, 2);
 					if (isset($pong)) {
@@ -261,13 +268,30 @@ class BotTask extends CakeSocket {
 								$this->nick = $this->nick . '_';
 								$this->join();
 							break;
-							case '353':
-								$this->out('Names on ' . str_replace('=', '', $msg));
+							case '353': //Names are sent on join this is they
+								$channel = strstr($msg, "#");
+								$channel = substr($channel, 0, strpos($channel, " "));
+								$this->activeUsers["#$channel"] = explode(' ', trim(str_replace(array('=', '@', '~', '!', ':'), '', strstr($msg, ":"))));
+								$this->out('Names on ' . $channel . ' added');
 							break;
 							case 'PART':
 							case 'JOIN':
+								$channel = $params[3];
 								$user = ClassRegistry::init('User');
 								$userName = substr($params[1], 0, strpos($params[1], "!"));
+								if ($cmd == 'PART') {
+									//Take them from the active listing
+									for ($i = 0; $i < count($this->activeUsers["#$channel"]); $i++) {
+ 										if ($this->activeUsers["#$channel"][$i] == $userName) {
+											unset ($this->activeUsers["#$channel"][$i]);
+										}
+									}
+								} else {
+									//Add them to the active list
+									$this->activeUsers["#$channel"][] = $userName;
+								}
+
+								
 								$thisUser = $user->findByUsername($userName);
 								if(empty($thisUser)) {
 									$user->create();
@@ -316,17 +340,25 @@ class BotTask extends CakeSocket {
 		}
 
 		//Handle commands
-		if ((($msg{0} === '~') || ($msg{0} === '!')) || ( (strpos($msg, " !") !== false) || (strpos($msg, " ~") !== false) )) {
+		if ((($msg{0} === '~') || ($msg{0} === '!')) || ( (strpos($msg, " ~") !== false) )) {
 			//create an array of the paramiters from the call offset by the location of the first ~
 			$params = explode(" ", substr($msg, strpos($msg, "~") + 1));
 			switch ($params[0]) {
 			case 'seen':
+				//Searching for nothing
 				if(empty($params[1])){
 					return "{$this->requester}: Who are you seeking ?";
 				}
+				//Seen themselvs?
 				if($params[1] == $this->requester){
 					return "{$this->requester}: Hide and seek? Found you!";
 				}
+				
+				//Searching for someone who is active
+				if (in_array($params[1], $this->activeUsers["#$this->channel"])) {
+					return "{$this->requester}: $params[1] is here right now!";
+				}
+				
 				$user = ClassRegistry::init('User');
 				$user = $user->findByUsername($params[1], 'date', 'date desc');
 				App::import('Core', 'Helper');
@@ -334,9 +366,10 @@ class BotTask extends CakeSocket {
 				$time = new TimeHelper();
 
 				$user = ClassRegistry::init('User');
+				$timeZoneOffset = date('P');
 				$user = $user->findByUsername($params[1], 'date', 'date desc');
 				if (is_array($user) && count($user)) {
-					return "{$this->requester}: I last saw {$params[1]} {$time->timeAgoInWords($user['User']['date'])}";
+					return "{$this->requester}: I last saw {$params[1]} {$time->timeAgoInWords($user['User']['date'])} GMT {$timeZoneOffset}";
 				}
 				else {
 					return "{$this->requester}: I haven't seen {$params[1]} in a while";
