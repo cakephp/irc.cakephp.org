@@ -320,15 +320,27 @@ class BotTask extends CakeSocket {
 			//create an array of the paramiters from the call offset by the location of the first ~
 			$params = explode(" ", substr($msg, strpos($msg, "~") + 1));
 			switch ($params[0]) {
-				case 'seen':
-					$user = ClassRegistry::init('User');
-					$user = $user->findByUsername($params[1], 'date', 'date desc');
-					if (is_array($user) && count($user)) {
-						return "{$this->requester}: I last saw {$params[1]} at {$user['User']['date']}";
-					}
-					else {
-						return "{$this->requester}: I haven't seen {$params[1]} in a while";
-					}
+			case 'seen':
+				if(empty($params[1])){
+					return "{$this->requester}: Who are you seeking ?";
+				}
+				if($params[1] == $this->requester){
+					return "{$this->requester}: Hide and seek? Found you!";
+				}
+				$user = ClassRegistry::init('User');
+				$user = $user->findByUsername($params[1], 'date', 'date desc');
+				App::import('Core', 'Helper');
+				App::import('Helper', 'Time');
+				$time = new TimeHelper();
+
+				$user = ClassRegistry::init('User');
+				$user = $user->findByUsername($params[1], 'date', 'date desc');
+				if (is_array($user) && count($user)) {
+					return "{$this->requester}: I last saw {$params[1]} {$time->timeAgoInWords($user['User']['date'])}";
+				}
+				else {
+					return "{$this->requester}: I haven't seen {$params[1]} in a while";
+				}
 				break;
 				case 'help':
 					if (empty($params[1])) {
