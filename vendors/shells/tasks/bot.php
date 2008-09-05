@@ -291,7 +291,7 @@ class BotTask extends CakeSocket {
 									$this->activeUsers["#$channel"][] = $userName;
 								}
 
-								
+
 								$thisUser = $user->findByUsername($userName);
 								if(empty($thisUser)) {
 									$user->create();
@@ -353,12 +353,12 @@ class BotTask extends CakeSocket {
 				if($params[1] == $this->requester){
 					return "{$this->requester}: Hide and seek? Found you!";
 				}
-				
+
 				//Searching for someone who is active
 				if (in_array($params[1], $this->activeUsers["#$this->channel"])) {
 					return "{$this->requester}: $params[1] is here right now!";
 				}
-				
+
 				$user = ClassRegistry::init('User');
 				$user = $user->findByUsername($params[1], 'date', 'date desc');
 				App::import('Core', 'Helper');
@@ -369,7 +369,7 @@ class BotTask extends CakeSocket {
 				$timeZoneOffset = date('P');
 				$user = $user->findByUsername($params[1], 'date', 'date desc');
 				if (is_array($user) && count($user)) {
-					return "{$this->requester}: I last saw {$params[1]} {$time->timeAgoInWords($user['User']['date'])} GMT {$timeZoneOffset}";
+					return "{$this->requester}: I last saw {$params[1]} {$time->timeAgoInWords($user['User']['date'])}";
 				}
 				else {
 					return "{$this->requester}: I haven't seen {$params[1]} in a while";
@@ -483,8 +483,8 @@ class BotTask extends CakeSocket {
 	}
 
 /**
- * 
- * 
+ *
+ *
  */
 	function log($input = array()) {
 		if (!isset($input['created'])) {
