@@ -34,7 +34,13 @@
  */
 App::import('Core', 'Socket');
 App::import('Core', 'Set');
-
+/**
+ * BotTask class
+ *
+ * @uses                 CakeSocket
+ * @package
+ * @subpackage           .home.andy.www.ircBot.app.vendors.shells.tasks
+ */
 class BotTask extends CakeSocket {
 /**
  * Nick to use in the channels
@@ -43,7 +49,6 @@ class BotTask extends CakeSocket {
  * @access public
  */
 	var $nick = 'CakeBot';
-
 /**
  * Internal channel holder
  *
@@ -51,7 +56,6 @@ class BotTask extends CakeSocket {
  * @access public
  */
 	var $channel = null;
-
 /**
  * Internal requester holder
  *
@@ -59,7 +63,6 @@ class BotTask extends CakeSocket {
  * @access public
  */
 	var $requester = null;
-
 /**
  * Channels to join once connected
  *
@@ -69,7 +72,6 @@ class BotTask extends CakeSocket {
 	var $channels = array(
 		'#cakephp',
 	);
-
 /**
  * Default connection paramiters
  *
@@ -82,7 +84,6 @@ class BotTask extends CakeSocket {
 		'port' => 6667,
 		'persistent' => false
 	);
-
 /**
  * The call back function to be called every time there is a pong (status updates maybe?) (NOT YET IMPLEMENTED)
  *
@@ -90,12 +91,10 @@ class BotTask extends CakeSocket {
  * @access public
  */
 	var $callback = null;
-
 /**
  * Contains the names of all active users inside of sub array's for each channel
  */
 	var $activeUsers = array();
-
 /**
  * Associative array listing all the callback functions (using call_user_func) with their key as the function's name
  *
@@ -103,7 +102,6 @@ class BotTask extends CakeSocket {
  * @access public
  */
 	var $hooks = array(); // Fill with associative array
-
 /**
  * Construct this object
  *
@@ -114,8 +112,6 @@ class BotTask extends CakeSocket {
 		parent::__construct($this->config);
 		$this->Dispatch =& $dispatcher;
 	}
-
-
 /**
  * Not implemented
  *
@@ -123,7 +119,6 @@ class BotTask extends CakeSocket {
  * @access public
  */
 	function startup() {}
-
 /**
  * Not implemented
  *
@@ -131,8 +126,6 @@ class BotTask extends CakeSocket {
  * @access public
  */
 	function initialize() {}
-
-
 /**
  * Not implemented
  *
@@ -140,7 +133,6 @@ class BotTask extends CakeSocket {
  * @access public
  */
 	function loadTasks() {}
-
 /**
  * Overloads CakeSocket's connect
  *
@@ -201,7 +193,6 @@ class BotTask extends CakeSocket {
 		}
 		return true;
 	}
-
 /**
  * Deals with the input from the user
  *
@@ -209,13 +200,11 @@ class BotTask extends CakeSocket {
  * @access public
  */
 	function execute() {
-
 		//Pull up all the channels
 		$channel = ClassRegistry::init('Channel');
 		$channels = $channel->find('all', array('conditions' => array('Channel.enabled' => 1)));
 		$this->channels = Set::extract($channels, "{n}.Channel.name");
 		unset($channel, $channels);
-
 		if ($this->connect()) {
 			while (is_resource($this->connection) && !feof($this->connection)) {
 		        	$line =  fgets($this->connection, 1024);
@@ -223,7 +212,6 @@ class BotTask extends CakeSocket {
 					list($ping, $pong) = $this->getParams(':', $line, 2);
 					if (isset($pong)) {
 						$this->write("PONG $pong\r\n");
-
 						// Now that we have the pong, maybe put a callback function here ot maybe output regular messages
 						/*
 						if ($messages = call_user_func($this->callback)) {
@@ -242,12 +230,9 @@ class BotTask extends CakeSocket {
 					unset($ping, $pong); //Php is bad about unsetting things since it's usual scope is one execution and this will help keep the program from filling up the computer
 				} elseif ($line{0} === ':') {
 					$params = $this->getParams("\s:", $line, 5);
-
 					if (isset($params[2])) {
-
 						$cmd = $params[2];
 						$msg = @$params[4];
-
 						switch ($cmd) {
 							case 'PRIVMSG':
 								$this->channel = $params[3];
@@ -290,8 +275,6 @@ class BotTask extends CakeSocket {
 									//Add them to the active list
 									$this->activeUsers["#$channel"][] = $userName;
 								}
-
-
 								$thisUser = $user->findByUsername($userName);
 								if(empty($thisUser)) {
 									$user->create();
@@ -322,7 +305,6 @@ class BotTask extends CakeSocket {
 		}
 		return false;
 	}
-
 /**
  * Deals with the input from the user
  *
@@ -334,11 +316,9 @@ class BotTask extends CakeSocket {
 		if (empty($msg)) {
 			return $msg;
 		}
-
 		if (!$this->log(array('channel' => $this->channel, 'username' => $this->requester, 'text' => $msg))) {
 			$this->out('Error loggin message for ' . $this->requester . ' in ' . $this->channel);
 		}
-
 		//Handle commands
 		if ((($msg{0} === '~') || ($msg{0} === '!')) || ( (strpos($msg, " ~") !== false) )) {
 			//create an array of the paramiters from the call offset by the location of the first ~
@@ -353,18 +333,15 @@ class BotTask extends CakeSocket {
 				if($params[1] == $this->requester){
 					return "{$this->requester}: Hide and seek? Found you!";
 				}
-
 				//Searching for someone who is active
 				if (in_array($params[1], $this->activeUsers["#$this->channel"])) {
 					return "{$this->requester}: $params[1] is here right now!";
 				}
-
 				$user = ClassRegistry::init('User');
 				$user = $user->findByUsername($params[1], 'date', 'date desc');
 				App::import('Core', 'Helper');
 				App::import('Helper', 'Time');
 				$time = new TimeHelper();
-
 				$user = ClassRegistry::init('User');
 				$timeZoneOffset = date('P');
 				$user = $user->findByUsername($params[1], 'date', 'date desc');
@@ -441,7 +418,6 @@ class BotTask extends CakeSocket {
 						return $preAppend.call_user_func_array($this->hooks[$tell], am(array($user), $extraParams));
 					}
 					unset ($preAppend);
-
 					$Tell = ClassRegistry::init('Tell');
 					$message = $Tell->field('message', array('keyword' => $tell));
 					unset($Tell);
@@ -468,9 +444,7 @@ class BotTask extends CakeSocket {
 						'keyword' => $tell,
 						'message' => $message
 					)));
-
 					unset($tell, $Tell, $message, $msg);
-
 					return "$this->requester, that's good to know";
 				}
 				else {
@@ -478,13 +452,14 @@ class BotTask extends CakeSocket {
 				}
 			}
 		}
-
 		unset($msg);
 	}
-
 /**
+ * log method
  *
- *
+ * @param array $input
+ * @return void
+ * @access public
  */
 	function log($input = array()) {
 		if (!isset($input['created'])) {
@@ -494,7 +469,6 @@ class BotTask extends CakeSocket {
 		$Log->create($input);
 		return $Log->save();
 	}
-
 /**
  * Does a regex match to handle the message
  *
@@ -507,7 +481,6 @@ class BotTask extends CakeSocket {
 	function getParams($regex, $string, $offset = -1) {
 		return str_replace(array("\r\n", "\n"), '', preg_split("/[{$regex}]+/", $string, $offset));
 	}
-
 /**
  * Prompts the user for input, and returns it.
  *
@@ -577,6 +550,5 @@ class BotTask extends CakeSocket {
 		}
 		return $this->Dispatch->stderr($string."\n");
 	}
-
 }
 ?>
