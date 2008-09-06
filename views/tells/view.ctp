@@ -1,3 +1,4 @@
+<?php /* SVN FILE: $Id$ */ ?>
 <div class="tells view">
 <h2><?php  __('Tell');?></h2>
 	<dl><?php $i = 0; $class = ' class="altrow"';?>

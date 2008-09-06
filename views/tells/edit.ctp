@@ -1,3 +1,4 @@
+<?php /* SVN FILE: $Id$ */ ?>
 <div class="tells form">
 <?php echo $form->create('Tell');?>
 	<fieldset>

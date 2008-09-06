@@ -1,42 +1,43 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * Short description for file.
+ * Short description for channels_controller.php
  *
- * Long description for file
+ * Long description for channels_controller.php
  *
  * PHP versions 4 and 5
  *
- * Copyright 2005-2008, Cake Software Foundation, Inc.
- *								1785 E. Sahara Avenue, Suite 490-204
- *								Las Vegas, Nevada 89104
+ * CakePHP(tm) : Rapid Development Framework <http://www.cakephp.org/>
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
  * @filesource
- * @copyright		Copyright 2005-2008, Cake Software Foundation, Inc.
- * @link			http://www.cakefoundation.org/projects/info/cakebot
- * @package			$TM_DIRECTORY
- * @subpackage		$TM_DIRECTORY
- * @since			$TM_DIRECTORY v (1.0)
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
- * @license			http://www.opensource.org/licenses/mit-license.php The MIT License
- */
-/**
- * Channels controller
- *
- *
- * @package		cakebot
- * @subpackage	cakebot.controllers
+ * @copyright            CakePHP(tm) : Rapid Development Framework <http://www.cakephp.org/>
+ * @link                 http://www.cakephp.org
+ * @package              cakebot
+ * @subpackage           cakebot.controllers
+ * @since                1.0
+ * @version              $Revision$
+ * @modifiedBy           $LastChangedBy$
+ * @lastModified         $Date$
+ * @license              http://www.opensource.org/licenses/mit-license.php The MIT License
  */
 class ChannelsController extends AppController {
-
+/**
+ * name property
+ *
+ * @var string 'Channels'
+ * @access public
+ */
 	var $name = 'Channels';
+/**
+ * helpers property
+ *
+ * @var array
+ * @access public
+ */
 	var $helpers = array('Html', 'Form');
-
 /**
  * View channel listings
  *
@@ -47,7 +48,6 @@ class ChannelsController extends AppController {
 		$this->Channel->recursive = 0;
 		$this->set('channels', $this->paginate());
 	}
-
 /**
  * View a single channel
  *
@@ -61,7 +61,6 @@ class ChannelsController extends AppController {
 		}
 		$this->set('channel', $this->Channel->read(null, $id));
 	}
-
 /**
  * Add a new channel
  *
@@ -79,7 +78,6 @@ class ChannelsController extends AppController {
 			}
 		}
 	}
-
 /**
  * Edit an existing channel
  *
@@ -103,7 +101,6 @@ class ChannelsController extends AppController {
 			$this->data = $this->Channel->read(null, $id);
 		}
 	}
-
 /**
  * Delete a channel
  *
@@ -120,6 +117,5 @@ class ChannelsController extends AppController {
 			$this->redirect(array('action'=>'index'));
 		}
 	}
-
 }
 ?>

@@ -1,3 +1,4 @@
+<?php /* SVN FILE: $Id$ */ ?>
 <div class="tells index">
 <h2><?php __('Tells');?></h2>
 <p>

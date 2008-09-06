@@ -1,4 +1,4 @@
-<?php
+<?php /* SVN FILE: $Id$ */
 echo $rss->header();
 
 if (!isset($channel)) {

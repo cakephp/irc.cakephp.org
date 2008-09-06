@@ -28,14 +28,11 @@
  * @license			http://www.opensource.org/licenses/mit-license.php The MIT License
  */
 /**
- * This is a placeholder class.
- * Create the same file in app/app_helper.php
+ * AppHelper class
  *
- * Add your application-wide methods in the class below, your helpers
- * will inherit them.
- *
- * @package		cake
- * @subpackage	cake.cake
+ * @uses                 Helper
+ * @package              cakebot
+ * @subpackage           cakebot
  */
 class AppHelper extends Helper {
 }

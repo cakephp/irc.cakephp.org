@@ -1,47 +1,67 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * Short description for file.
+ * Short description for tells_controller.php
  *
- * Long description for file
+ * Long description for tells_controller.php
  *
  * PHP versions 4 and 5
  *
- * Copyright 2005-2008, Cake Software Foundation, Inc.
- *								1785 E. Sahara Avenue, Suite 490-204
- *								Las Vegas, Nevada 89104
+ * CakePHP(tm) : Rapid Development Framework <http://www.cakephp.org/>
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
  * @filesource
- * @copyright		Copyright 2005-2008, Cake Software Foundation, Inc.
- * @link			http://www.cakefoundation.org/projects/info/cakebot
- * @package			$TM_DIRECTORY
- * @subpackage		$TM_DIRECTORY
- * @since			$TM_DIRECTORY v (1.0)
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
- * @license			http://www.opensource.org/licenses/mit-license.php The MIT License
+ * @copyright            CakePHP(tm) : Rapid Development Framework <http://www.cakephp.org/>
+ * @link                 http://www.cakephp.org
+ * @package              cakebot
+ * @subpackage           cakebot.controllers
+ * @since                1.0
+ * @version              $Revision$
+ * @modifiedBy           $LastChangedBy$
+ * @lastModified         $Date$
+ * @license              http://www.opensource.org/licenses/mit-license.php The MIT License
  */
 /**
- * Tells controller
+ * TellsController class
  *
- *
- * @package		cakebot
- * @subpackage	cakebot.controllers
+ * @uses                 AppController
+ * @package              cakebot
+ * @subpackage           cakebot.controllers
  */
 class TellsController extends AppController {
-
+/**
+ * name property
+ *
+ * @var string 'Tells'
+ * @access public
+ */
 	var $name = 'Tells';
+/**
+ * helpers property
+ *
+ * @var array
+ * @access public
+ */
 	var $helpers = array('Html', 'Form');
-
+/**
+ * index method
+ *
+ * @return void
+ * @access public
+ */
 	function index() {
 		$this->Tell->recursive = 0;
 		$this->set('tells', $this->paginate());
 	}
-
+/**
+ * view method
+ *
+ * @param mixed $id
+ * @return void
+ * @access public
+ */
 	function view($id = null) {
 		if (!$id) {
 			$this->Session->setFlash(__('Invalid Tell.', true));
@@ -49,7 +69,12 @@ class TellsController extends AppController {
 		}
 		$this->set('tell', $this->Tell->read(null, $id));
 	}
-
+/**
+ * add method
+ *
+ * @return void
+ * @access public
+ */
 	function add() {
 		if (!empty($this->data)) {
 			$this->Tell->create();
@@ -61,7 +86,13 @@ class TellsController extends AppController {
 			}
 		}
 	}
-
+/**
+ * edit method
+ *
+ * @param mixed $id
+ * @return void
+ * @access public
+ */
 	function edit($id = null) {
 		if (!$id && empty($this->data)) {
 			$this->Session->setFlash(__('Invalid Tell', true));
@@ -79,7 +110,13 @@ class TellsController extends AppController {
 			$this->data = $this->Tell->read(null, $id);
 		}
 	}
-
+/**
+ * delete method
+ *
+ * @param mixed $id
+ * @return void
+ * @access public
+ */
 	function delete($id = null) {
 		if (!$id) {
 			$this->Session->setFlash(__('Invalid id for Tell', true));
@@ -90,6 +127,5 @@ class TellsController extends AppController {
 			$this->redirect(array('action'=>'index'));
 		}
 	}
-
 }
 ?>

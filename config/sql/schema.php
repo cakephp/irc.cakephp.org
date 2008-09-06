@@ -1,7 +1,7 @@
-<?php 
+<?php
 /* SVN FILE: $Id$ */
 /* Cakebot10XX schema generated on: 2008-06-20 09:06:20 : 1213977800*/
-class CakebotSchema extends CakeSchema {
+class AppSchema extends CakeSchema {
 	var $name = 'Cakebot';
 
 	function before($event = array()) {

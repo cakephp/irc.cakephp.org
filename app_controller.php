@@ -1,5 +1,4 @@
 <?php
-/* SVN FILE: $Id$ */
 /**
  * Short description for file.
  *
@@ -28,18 +27,26 @@
  * @license			http://www.opensource.org/licenses/mit-license.php The MIT License
  */
 /**
- * Short description for class.
+ * AppController class
  *
- * Add your application-wide methods in the class below, your controllers
- * will inherit them.
- *
- * @package		cake
- * @subpackage	cake.app
+ * @uses                 Controller
+ * @package              cakebot
+ * @subpackage           cakebot
  */
 class AppController extends Controller {
-	
+/**
+ * components property
+ *
+ * @var array
+ * @access public
+ */
 	var $components = array('Auth');
-	
+/**
+ * beforeFilter method
+ *
+ * @return void
+ * @access public
+ */
 	function beforeFilter() {
 		$this->Auth->allow(array('index', 'view', 'display'));
 	}

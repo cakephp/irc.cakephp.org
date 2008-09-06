@@ -28,15 +28,12 @@
  * @lastmodified	$Date$
  * @license			http://www.opensource.org/licenses/mit-license.php The MIT License
  */
-
 /**
- * Application model for Cake.
+ * AppModel class
  *
- * Add your application-wide methods in the class below, your models
- * will inherit them.
- *
- * @package		cake
- * @subpackage	cake.app
+ * @uses                 Model
+ * @package              ircBot
+ * @subpackage           ircBot
  */
 class AppModel extends Model{
 }

@@ -1,2 +1,4 @@
-<?php e($xml->header()); ?>
-<?php echo $content_for_layout; ?>
+<?php /* SVN FILE: $Id$ */
+e($xml->header());
+echo $content_for_layout;
+?>
