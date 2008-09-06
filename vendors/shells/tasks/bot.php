@@ -207,7 +207,7 @@ class BotTask extends CakeSocket {
 		unset($channel, $channels);
 		if ($this->connect()) {
 			while (is_resource($this->connection) && !feof($this->connection)) {
-		        	$line =  fgets($this->connection, 1024);
+				$line =  fgets($this->connection, 1024);
 				if (stripos($line, 'PING') !== false) {
 					list($ping, $pong) = $this->getParams(':', $line, 2);
 					if (isset($pong)) {
@@ -225,8 +225,8 @@ class BotTask extends CakeSocket {
 								}
 							}
 						}
-						*/
-				        }
+ */
+					}
 					unset($ping, $pong); //Php is bad about unsetting things since it's usual scope is one execution and this will help keep the program from filling up the computer
 				} elseif ($line{0} === ':') {
 					$params = $this->getParams("\s:", $line, 5);
@@ -234,63 +234,63 @@ class BotTask extends CakeSocket {
 						$cmd = $params[2];
 						$msg = @$params[4];
 						switch ($cmd) {
-							case 'PRIVMSG':
-								$this->channel = $params[3];
-								$user = $this->getParams("!", $params[1], 3);
-								$this->requester = $user[0];
-								if ($this->requester != "freenode-connect") {
-									$this->out(date('H:i:s')." $this->requester: $msg");
-									if($msg = $this->handleMessage($msg)) {
-										if($this->channel == $this->nick){
-											$this->channel = $this->requester;
-										}
-										$this->write("PRIVMSG {$this->channel} :{$msg}\r\n");
+						case 'PRIVMSG':
+							$this->channel = $params[3];
+							$user = $this->getParams("!", $params[1], 3);
+							$this->requester = $user[0];
+							if ($this->requester != "freenode-connect") {
+								$this->out(date('H:i:s')." $this->requester: $msg");
+								if($msg = $this->handleMessage($msg)) {
+									if($this->channel == $this->nick){
+										$this->channel = $this->requester;
+									}
+									$this->write("PRIVMSG {$this->channel} :{$msg}\r\n");
+								}
+							}
+							break;
+						case '433': //Nick already registerd
+							$this->out($msg);
+							$this->nick = $this->nick . '_';
+							$this->join();
+							break;
+						case '353': //Names are sent on join this is they
+							$channel = strstr($msg, "#");
+							$channel = substr($channel, 0, strpos($channel, " "));
+							$this->activeUsers["#$channel"] = explode(' ', trim(str_replace(array('=', '@', '~', '!', ':'), '', strstr($msg, ":"))));
+							$this->out('Names on ' . $channel . ' added');
+							break;
+						case 'PART':
+						case 'JOIN':
+							$channel = $params[3];
+							$user = ClassRegistry::init('User');
+							$userName = substr($params[1], 0, strpos($params[1], "!"));
+							if ($cmd == 'PART') {
+								//Take them from the active listing
+								for ($i = 0; $i < count($this->activeUsers["#$channel"]); $i++) {
+									if ($this->activeUsers["#$channel"][$i] == $userName) {
+										unset ($this->activeUsers["#$channel"][$i]);
 									}
 								}
+							} else {
+								//Add them to the active list
+								$this->activeUsers["#$channel"][] = $userName;
+							}
+							$thisUser = $user->findByUsername($userName);
+							if(empty($thisUser)) {
+								$user->create();
+							}
+							$thisUser['User']['username'] = $userName;
+							$thisUser['User']['date'] = date('Y-m-d H:i:s');
+							if ($user->save($thisUser)) {
+								$this->out("Saved {$userName}'s state change");
+							}
+							else {
+								$this->out("Unable to save {$userName}'s state change");
+							}
+							unset($user, $thisUser);
 							break;
-							case '433': //Nick already registerd
-								$this->out($msg);
-								$this->nick = $this->nick . '_';
-								$this->join();
-							break;
-							case '353': //Names are sent on join this is they
-								$channel = strstr($msg, "#");
-								$channel = substr($channel, 0, strpos($channel, " "));
-								$this->activeUsers["#$channel"] = explode(' ', trim(str_replace(array('=', '@', '~', '!', ':'), '', strstr($msg, ":"))));
-								$this->out('Names on ' . $channel . ' added');
-							break;
-							case 'PART':
-							case 'JOIN':
-								$channel = $params[3];
-								$user = ClassRegistry::init('User');
-								$userName = substr($params[1], 0, strpos($params[1], "!"));
-								if ($cmd == 'PART') {
-									//Take them from the active listing
-									for ($i = 0; $i < count($this->activeUsers["#$channel"]); $i++) {
- 										if ($this->activeUsers["#$channel"][$i] == $userName) {
-											unset ($this->activeUsers["#$channel"][$i]);
-										}
-									}
-								} else {
-									//Add them to the active list
-									$this->activeUsers["#$channel"][] = $userName;
-								}
-								$thisUser = $user->findByUsername($userName);
-								if(empty($thisUser)) {
-									$user->create();
-								}
-								$thisUser['User']['username'] = $userName;
-								$thisUser['User']['date'] = date('Y-m-d H:i:s');
-								if ($user->save($thisUser)) {
-									$this->out("Saved {$userName}'s state change");
-								}
-								else {
-									$this->out("Unable to save {$userName}'s state change");
-								}
-								unset($user, $thisUser);
-							break;
-							default:
-								$this->out($msg);
+						default:
+							$this->out($msg);
 							break;
 						}
 						unset($cmd, $msg);
@@ -352,81 +352,81 @@ class BotTask extends CakeSocket {
 					return "{$this->requester}: I haven't seen {$params[1]} in a while";
 				}
 				break;
-				case 'help':
-					if (empty($params[1])) {
-						$this->write("PRIVMSG {$this->requester} :~help all : to see all the tells.\r\n");
-						$this->write("PRIVMSG {$this->requester} :~help <number> to limit the number of commands.\r\n");
-					} else {
-						if (isset($params[1])) {
-							$input = $params[1];
-							$Tell = ClassRegistry::init('Tell');
-							if ($input === 'all' || is_numeric($input)) {
-								$limit = 50;
-								if (is_numeric($input)) {
-									$limit = $input;
-								}
-								$tells = $Tell->find('list', array('fields' => array('Tell.keyword', 'Tell.message'), 'limit' => $limit));
-								//pr($tells);
-								$this->write("PRIVMSG {$this->requester} :The following commands are available:\r\n");
-								$this->write("PRIVMSG {$this->requester} :~<tell> to test it.\r\n");
-								$tells = array_flip($tells);
-								$this->write("PRIVMSG {$this->requester} :forget, seen, ".implode($tells, ", ")."\r\n");
+			case 'help':
+				if (empty($params[1])) {
+					$this->write("PRIVMSG {$this->requester} :~help all : to see all the tells.\r\n");
+					$this->write("PRIVMSG {$this->requester} :~help <number> to limit the number of commands.\r\n");
+				} else {
+					if (isset($params[1])) {
+						$input = $params[1];
+						$Tell = ClassRegistry::init('Tell');
+						if ($input === 'all' || is_numeric($input)) {
+							$limit = 50;
+							if (is_numeric($input)) {
+								$limit = $input;
+							}
+							$tells = $Tell->find('list', array('fields' => array('Tell.keyword', 'Tell.message'), 'limit' => $limit));
+							//pr($tells);
+							$this->write("PRIVMSG {$this->requester} :The following commands are available:\r\n");
+							$this->write("PRIVMSG {$this->requester} :~<tell> to test it.\r\n");
+							$tells = array_flip($tells);
+							$this->write("PRIVMSG {$this->requester} :forget, seen, ".implode($tells, ", ")."\r\n");
+						} else {
+							$message = $Tell->field('message', array('keyword' => $input));
+							if(!empty($message)){
+								$this->write("PRIVMSG {$this->requester} :{$input} is {$message}\r\n");
 							} else {
-								$message = $Tell->field('message', array('keyword' => $input));
-								if(!empty($message)){
-									$this->write("PRIVMSG {$this->requester} :{$input} is {$message}\r\n");
-								} else {
-									$this->write("PRIVMSG {$this->requester} :I don't know enough about {$input}\r\n");
-								}
+								$this->write("PRIVMSG {$this->requester} :I don't know enough about {$input}\r\n");
 							}
 						}
 					}
-					return false;
+				}
+				return false;
 				break;
-				case 'forget':
-					$Tell = ClassRegistry::init('Tell');
-					if ($Tell->delete($Tell->field('id', array('keyword' => $params[1])))) {
-						unset($Tell);
-						return "It's almost like I didn't know a thing about {$params[1]}";
-					}
-					else {
-						unset($Tell);
-						$this->out("There was an error deleting the tell");
-						return "There was an error deleting the tell";
-					}
+			case 'forget':
+				$Tell = ClassRegistry::init('Tell');
+				if ($Tell->delete($Tell->field('id', array('keyword' => $params[1])))) {
+					unset($Tell);
+					return "It's almost like I didn't know a thing about {$params[1]}";
+				}
+				else {
+					unset($Tell);
+					$this->out("There was an error deleting the tell");
+					return "There was an error deleting the tell";
+				}
 				break;
 				// There are no built in functions that they want, check the plugins and the tell database
-				default:
-					//Check for a plugin before querying the DB
-					$preAppend = "";
-					if (strtolower(@$params[2]) == "about") { // Squelch since param 2 may not exist and this is faster
-						$user = $params[1];
-						$tell = $params[3];
-						$preAppend = "$user: ";
+			default:
+				//Check for a plugin before querying the DB
+				$preAppend = "";
+				if (strtolower(@$params[2]) == "about") { // Squelch since param 2 may not exist and this is faster
+					$user = $params[1];
+					$tell = $params[3];
+					$preAppend = "$user: ";
+				}
+				else {
+					$user = $this->requester;
+					$tell = $params[0];
+				}
+				if (isSet($this->hooks[$tell])) {
+					if ($preAppend) { //This is an about
+						$extraParams = array_slice($params, 4);
 					}
 					else {
-						$user = $this->requester;
-						$tell = $params[0];
+						$extraParams = array_slice($params, 1);
 					}
-					if (isSet($this->hooks[$tell])) {
-						if ($preAppend) { //This is an about
-							$extraParams = array_slice($params, 4);
-						}
-						else {
-							$extraParams = array_slice($params, 1);
-						}
-						return $preAppend.call_user_func_array($this->hooks[$tell], am(array($user), $extraParams));
-					}
-					unset ($preAppend);
-					$Tell = ClassRegistry::init('Tell');
-					$message = $Tell->field('message', array('keyword' => $tell));
-					unset($Tell);
-					if ($message) {
-						return "{$user}: {$tell} is {$message}";
-					}
-					else {
-						return "{$user}: I don't know enough about {$tell}";
-					}
+					return $preAppend.call_user_func_array($this->hooks[$tell], am(array($user), $extraParams));
+				}
+				unset ($preAppend);
+				$Tell = ClassRegistry::init('Tell');
+				$message = $Tell->field('message', array('keyword' => $tell));
+				unset($Tell);
+				if ($message) {
+					return "{$user}: {$tell} is {$message}";
+				}
+				else {
+					return "{$user}: I don't know enough about {$tell}";
+				}
 				break;
 			}
 		}
@@ -503,7 +503,7 @@ class BotTask extends CakeSocket {
 		}
 		if (is_array($options)) {
 			while ($in == '' || ($in && (!in_array(low($in), $options) && !in_array(up($in), $options)) && !in_array($in, $options))) {
-				 $in = $this->Dispatch->getInput($prompt, $options, $default);
+				$in = $this->Dispatch->getInput($prompt, $options, $default);
 			}
 		}
 		if ($in) {

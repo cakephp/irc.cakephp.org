@@ -34,9 +34,7 @@
  */
 App::import('Core', 'HttpSocket');
 App::import('Core', 'xml');
-
 class SVNCommandTask extends Object {
-
 /**
  * Not implemented
  *
@@ -44,7 +42,6 @@ class SVNCommandTask extends Object {
  * @access public
  */
 	function startup() {}
-
 /**
  * Not implemented
  *
@@ -52,7 +49,6 @@ class SVNCommandTask extends Object {
  * @access public
  */
 	function initialize() {}
-
 /**
  * Not implemented
  *
@@ -60,7 +56,6 @@ class SVNCommandTask extends Object {
  * @access public
  */
 	function loadTasks() {}
-
 /**
  * Function called by Bot to get the listing from the svn server
  *
@@ -70,28 +65,23 @@ class SVNCommandTask extends Object {
 	function execute() {
 		if (function_exists("svn_log")) {
 			if (func_num_args() > 1) {
-	
 				$args = func_get_args();
 				$log = $this->svn_log_limit ( "https://svn.cakephp.org/repo/branches/1.2.x.x/", $args[1] );
 				if ($log) {
 					$lastRevision = $log[0]['rev'];
 					return "Revision {$log[0]['rev']} ({$log[0]['author']}): {$log[0]['msg']}";
-				}
-				else {
+				} else {
 					return "Revision $args[1] is not a valid revision";
 				}
-			}
-			else {
+			} else {
 				$log = $this->svn_log_limit ( "https://svn.cakephp.org/repo/branches/1.2.x.x/" );
 				$lastRevision = $log[0]['rev'];
 				return "Revision {$log[0]['rev']} ({$log[0]['author']}): {$log[0]['msg']}";
 			}
-		}
-		else {
+		} else {
 			return "svn is https://svn.cakephp.org/repo/";
 		}
 	}
-
 /**
  * Ripped from http://php.oregonstate.edu/manual/en/function.svn-log.php get the limited log
  *
@@ -112,6 +102,5 @@ class SVNCommandTask extends Object {
 		}
 		return $ret;
 	}
-
 }
 ?>

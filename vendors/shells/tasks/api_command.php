@@ -26,15 +26,13 @@
  * @license			http://www.opensource.org/licenses/mit-license.php The MIT License
  */
 /**
- * Give links to the users for the CakePHP API 
+ * Give links to the users for the CakePHP API
  *
  *
  * @package		cakebot
  * @subpackage	cakebot.vendors.shells.tasks
  */
-
 class ApiCommandTask extends Object {
-
 /**
  * Not implemented
  *
@@ -42,7 +40,6 @@ class ApiCommandTask extends Object {
  * @access public
  */
 	function startup() {}
-
 /**
  * Not implemented
  *
@@ -50,7 +47,6 @@ class ApiCommandTask extends Object {
  * @access public
  */
 	function initialize() {}
-
 /**
  * Not implemented
  *
@@ -58,9 +54,8 @@ class ApiCommandTask extends Object {
  * @access public
  */
 	function loadTasks() {}
-
 /**
- * Create the message 
+ * Create the message
  *
  * @param string $userName the username to send this message to
  * @return string the message to send to the user/channel
@@ -69,13 +64,10 @@ class ApiCommandTask extends Object {
 	function execute() {
 		if (func_num_args() > 1) {
 			$ClassName = implode(array_splice(func_get_args(), 1), "_");
-	
 			$url =  sprintf( "http://api.cakephp.org/class_%s.html", Inflector::underscore($ClassName));
 			$url = str_replace("__", "_", $url);
-	
 			return "This API may have this at $url";
-		}
-		else {
+		} else {
 			return "This API is an incredible resource which you can find at http://api.cakephp.org";
 		}
 	}

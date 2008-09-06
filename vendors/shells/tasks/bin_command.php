@@ -32,9 +32,7 @@
  * @package		cakebot
  * @subpackage	cakebot.vendors.shells.tasks
  */
-
 class BinCommandTask extends Object {
-
 /**
  * Not implemented
  *
@@ -42,7 +40,6 @@ class BinCommandTask extends Object {
  * @access public
  */
 	function startup() {}
-
 /**
  * Not implemented
  *
@@ -50,7 +47,6 @@ class BinCommandTask extends Object {
  * @access public
  */
 	function initialize() {}
-
 /**
  * Not implemented
  *
@@ -58,9 +54,8 @@ class BinCommandTask extends Object {
  * @access public
  */
 	function loadTasks() {}
-
 /**
- * Create the message 
+ * Create the message
  *
  * @param string $userName the username to send this message to
  * @return string the message to send to the user/channel

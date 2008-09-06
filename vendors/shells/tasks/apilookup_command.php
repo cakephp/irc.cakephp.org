@@ -32,20 +32,17 @@
  * @package		cakebot
  * @subpackage	cakebot.vendors.shells.tasks
  */
-
 class ApilookupCommandTask extends Object {
-
 /**
  * Holds the available api tabs.
  *
  * @var array
  * @access public
  */
-    var $apiTabs = array(
-        '1.1' => '1.1/',
-        'tests' => 'tests/',
-    );
-
+	var $apiTabs = array(
+		'1.1' => '1.1/',
+		'tests' => 'tests/',
+	);
 /**
  * Holds the current api tab
  *
@@ -53,8 +50,7 @@ class ApilookupCommandTask extends Object {
  *
  * @access public
  */
-    var $apiTab;
-
+	var $apiTab;
 /**
  * Not implemented
  *
@@ -62,7 +58,6 @@ class ApilookupCommandTask extends Object {
  * @access public
  */
 	function startup() {}
-
 /**
  * Not implemented
  *
@@ -70,7 +65,6 @@ class ApilookupCommandTask extends Object {
  * @access public
  */
 	function initialize() {}
-
 /**
  * Not implemented
  *
@@ -78,7 +72,6 @@ class ApilookupCommandTask extends Object {
  * @access public
  */
 	function loadTasks() {}
-
 /**
  * Returns a URL to search the api. Allows for _ . and : in the query string.
  *
@@ -93,36 +86,35 @@ class ApilookupCommandTask extends Object {
  * @access public
  */
 	function execute() {
-        $apilookupURL = "%s: http://api.cakephp.org/%ssearch.php?query=%s";
-        $queryString = '';
-        $counter = 0;
-        $args = func_get_args();
-        foreach($args as $arg) {
-            if($counter == 0) {
-                $nick = $arg;
-            }
-            if($counter == 1) {
-                if(isset($this->apiTabs[$arg])) {
-                    $this->apiTab = $this->apiTabs[$arg];
-                } else {
-                    $this->apiTab = '';
-                    $queryString .= $arg;
-                }
-            } elseif($counter > 1) {
-                $queryString .= $arg;
-            }
-            $counter++;
-        }
-        App::import('Sanitize');
-        $queryString = Sanitize::paranoid($queryString, array(':', '_', '.'));
-        if(count($args) > 1) {
-            $return =  sprintf($apilookupURL, $nick, $this->apiTab, $queryString);
-        } else {
-            $return = $nick . ": What are you looking for? try ~apilookup query, ~apilookup tests query, ~apilookup 1.1 query";
-        }
-        $apilookupURL = $queryString = $counter = $args = $arg = $nick = $this->apiTab = null;
-        return $return;
+		$apilookupURL = "%s: http://api.cakephp.org/%ssearch.php?query=%s";
+		$queryString = '';
+		$counter = 0;
+		$args = func_get_args();
+		foreach($args as $arg) {
+			if($counter == 0) {
+				$nick = $arg;
+			}
+			if($counter == 1) {
+				if(isset($this->apiTabs[$arg])) {
+					$this->apiTab = $this->apiTabs[$arg];
+				} else {
+					$this->apiTab = '';
+					$queryString .= $arg;
+				}
+			} elseif($counter > 1) {
+				$queryString .= $arg;
+			}
+			$counter++;
+		}
+		App::import('Sanitize');
+		$queryString = Sanitize::paranoid($queryString, array(':', '_', '.'));
+		if(count($args) > 1) {
+			$return =  sprintf($apilookupURL, $nick, $this->apiTab, $queryString);
+		} else {
+			$return = $nick . ": What are you looking for? try ~apilookup query, ~apilookup tests query, ~apilookup 1.1 query";
+		}
+		$apilookupURL = $queryString = $counter = $args = $arg = $nick = $this->apiTab = null;
+		return $return;
 	}
-
 }
 ?>

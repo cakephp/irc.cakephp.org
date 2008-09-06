@@ -32,9 +32,7 @@
  * @package		cakebot
  * @subpackage	cakebot.vendors.shells.tasks
  */
-
 class GoogleCommandTask extends Object {
-
 /**
  * Not implemented
  *
@@ -42,7 +40,6 @@ class GoogleCommandTask extends Object {
  * @access public
  */
 	function startup() {}
-
 /**
  * Not implemented
  *
@@ -50,7 +47,6 @@ class GoogleCommandTask extends Object {
  * @access public
  */
 	function initialize() {}
-
 /**
  * Not implemented
  *
@@ -58,9 +54,8 @@ class GoogleCommandTask extends Object {
  * @access public
  */
 	function loadTasks() {}
-
 /**
- * Create the message 
+ * Create the message
  *
  * @param string $userName the username to send this message to
  * @return string the message to send to the user/channel
@@ -70,10 +65,8 @@ class GoogleCommandTask extends Object {
 		if (func_num_args() > 1) {
 			$searchString = implode(array_splice(func_get_args(), 1), " ");
 			$url =  sprintf( "http://www.google.com/search?q=%s", urlencode($searchString));
-	
 			return "To see your query go here: $url";
-		}
-		else {
+		} else {
 			return "Google is a great place to find more information on this subject ( http://google.com )";
 		}
 	}

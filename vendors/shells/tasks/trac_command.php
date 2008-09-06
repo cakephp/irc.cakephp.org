@@ -33,9 +33,7 @@
  * @package		cakebot
  * @subpackage	cakebot.vendors.shells.tasks
  */
-
 class TracCommandTask extends Object {
-
 /**
  * Not implemented
  *
@@ -43,7 +41,6 @@ class TracCommandTask extends Object {
  * @access public
  */
 	function startup() {}
-
 /**
  * Not implemented
  *
@@ -51,7 +48,6 @@ class TracCommandTask extends Object {
  * @access public
  */
 	function initialize() {}
-
 /**
  * Not implemented
  *
@@ -59,9 +55,8 @@ class TracCommandTask extends Object {
  * @access public
  */
 	function loadTasks() {}
-
 /**
- * Create the message 
+ * Create the message
  *
  * @param string $userName the username to send this message to
  * @return string the message to send to the user/channel
@@ -72,10 +67,8 @@ class TracCommandTask extends Object {
 			$args = func_get_args();
 			$searchString = str_replace("#", "", $args[1]);
 			$url =  sprintf( "https://trac.cakephp.org/ticket/%s", urlencode($searchString));
-	
 			return "To view this ticket go here: $url";
-		}
-		else {
+		} else {
 			return "CakePHP development information can be found at https://trac.cakephp.org";
 		}
 	}

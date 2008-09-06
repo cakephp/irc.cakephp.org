@@ -36,8 +36,8 @@
  * @subpackage	cakebot.vendors
  */
 class IrcShell extends Shell {
-
-	var $tasks = array('Bot',
+	var $tasks = array(
+		'Bot',
 		'SVNCommand',
 		'BinCommand',
 		'PhpCommand',
@@ -46,7 +46,6 @@ class IrcShell extends Shell {
 		'GoogleCommand',
 		'TracCommand'
 	);
-
 /**
  * Not implemented
  *
@@ -54,7 +53,6 @@ class IrcShell extends Shell {
  * @access public
  */
 	function initialize() {}
-
 /**
  * Not implemented
  *
@@ -62,7 +60,6 @@ class IrcShell extends Shell {
  * @access public
  */
 	function startup() {}
-
 /**
  * Function that is called by
  *
@@ -70,23 +67,19 @@ class IrcShell extends Shell {
  * @access public
  */
 	function main() {
-
 		foreach($this->tasks as $task) {
 			if (substr($task, -7) == "Command") {
 				$this->Bot->hooks[strtolower(substr($task, 0, -7))] = array($this->{$task}, 'execute');
 			}
 		}
-
 		if (isset($this->args[0])) {
 			$this->Bot->nick = $this->args[0];
 		} else {
 			$this->Bot->nick = 'CakeBot';
 		}
-
 		// It might be fun to say something every now and again like say, SVN commits
 		//$this->Bot->setCallback();
 		$this->Bot->execute();
 	}
-
 }
 ?>
