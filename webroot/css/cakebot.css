@@ -164,29 +164,41 @@ list-style-image:  url("images/arrow.gif");
 	color:#fff;
 
 }
-#search {
+#site_search {
 	position:absolute;
+	right:0;
 	top:42px;
+}
+#search {
 	height:40px;
 	line-height:40px;
-	right:0;
+	min-width:100px;
 	padding-right:15px;
-	min-width: 100px;
+	right:0pt;
+	top:42px;
 }
-form#search {
-	width: auto;
-	margin-right: 20px;
-	padding: 0;
+#search_submit_btn {
+	display:inline;
+	font-size:100%;
+	padding:0px;
+	text-align:right;
+	position:absolute;
+	right:10px;
+	text-align:right;
+	top:12px;
 }
-
-#search input {
-	display: inline;
-	font-size: 100%;
-	padding: 0;
-	width: auto;
-	vertical-align: middle;
+form#search input.query {
+	width:200px;
+	display:inline;
+	position:absolute;
+	right:70px;
+	top:12px;
+	width:180px;
+	font-size:100%;
+	padding:0;
+	margin:0;
+	line-height:40px;
 }
-
 #content ul, #content li, #content ol {
 	margin-left: 20px;
 }

@@ -75,6 +75,31 @@ class LogsController extends AppController {
 		$this->set('channels', $this->Channel->find('all'));
 	}
 /**
+ * search method
+ *
+ * @param mixed $channel
+ * @param mixed $term
+ * @return void
+ * @access public
+ */
+	function search($channel = null, $term = null) {
+		if ($this->data) {
+			$this->redirect(array($this->data['Search']['channel'], urlencode($this->data['Search']['query'])));
+		}
+		$this->Session->setFlash('Matching "' . htmlspecialchars($term) . '"');
+		$this->Log->recursive = 0;
+		if (strpos($term, '%') === false) {
+			$term = '%' . $term . '%';
+		}
+		$conditions = array('channel' => "#$channel");
+		$conditions['OR'] = array(
+			'username LIKE ' => $term,
+			'text LIKE ' => $term,
+		);
+		$this->set('logs', $this->paginate('Log', $conditions));
+		$this->render('view');
+	}
+/**
  * view method
  *
  * @param mixed $channel

@@ -48,7 +48,7 @@ class AppController extends Controller {
  * @access public
  */
 	function beforeFilter() {
-		$this->Auth->allow(array('index', 'view', 'display'));
+		$this->Auth->allow(array('index', 'view', 'display', 'search'));
 	}
 }
 ?>

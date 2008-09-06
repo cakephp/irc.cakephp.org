@@ -34,6 +34,7 @@
  * to use (in this case, /app/views/pages/home.thtml)...
  */
 	Router::connect('/', array('controller' => 'logs', 'action' => 'view', 'cakephp'));
+	Router::connect('/search/*', array('controller' => 'logs', 'action' => 'search'));
 /**
  * ...and connect the rest of 'Pages' controller's urls.
  */
