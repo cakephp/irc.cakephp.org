@@ -415,31 +415,6 @@ class BotTask extends CakeSocket {
 					else {
 						$extraParams = array_slice($params, 1);
 					}
-<<<<<<< .mine
-					if (isSet($this->hooks[$tell])) {
-						if ($preAppend) { //This is an about
-							$extraParams = array_slice($params, 4);
-						}
-						else {
-							$extraParams = array_slice($params, 1);
-						}
-						return $preAppend.call_user_func_array($this->hooks[$tell], am(array($user), $extraParams));
-					}
-					unset ($preAppend);
-
-					$Tell = ClassRegistry::init('Tell');
-					$message = $Tell->field('message', array('keyword' => $tell));
-					unset($Tell);
-					if ($message) {
-						return "{$user}: {$tell} is {$message}";
-					}
-					else {
-						//Check to make sure its not a mid sentence one because those are annoying
-						if (($msg{0} === '~') || ($msg{0} === '!')) {
-							return "{$user}: I don't know enough about {$tell}";
-						}
-					}
-=======
 					return $preAppend.call_user_func_array($this->hooks[$tell], am(array($user), $extraParams));
 				}
 				unset ($preAppend);
@@ -452,7 +427,6 @@ class BotTask extends CakeSocket {
 				else {
 					return "{$user}: I don't know enough about {$tell}";
 				}
->>>>>>> .r56
 				break;
 			}
 		}
