@@ -320,7 +320,7 @@ class BotTask extends CakeSocket {
 			$this->out('Error loggin message for ' . $this->requester . ' in ' . $this->channel);
 		}
 		//Handle commands
-		if ((($msg{0} === '~') || ($msg{0} === '!')) || ( (strpos($msg, " ~") !== false) )) {
+		if ($msg{0} === '~' || $msg{0} === '!') {
 			//create an array of the paramiters from the call offset by the location of the first ~
 			$params = explode(" ", substr($msg, strpos($msg, "~") + 1));
 			switch ($params[0]) {
