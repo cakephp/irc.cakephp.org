@@ -86,13 +86,13 @@ foreach ($logs as $log):
 		} else {
 			echo $html->link('#', array('action' => 'link', $log['Log']['id'], $wrap, '#' => 'message' . ($log['Log']['id'] + 10)), array(
 				'id' => 'message' . $log['Log']['id'],
-				'title' => 'direct link to: ' .	$log['Log']['text'])
+				'title' => 'direct link to: ' .	htmlentities($log['Log']['text']))
 			);
 		}
 		?></td>
 		<td nowrap="true"><?php echo $time->niceShort($log['Log']['created'], $offset); ?></td>
 		<td><?php echo $log['Log']['username']; ?></td>
-		<td class="log-text"><?php echo $html->clean(htmlentities($log['Log']['text'])); ?></td>
+		<td class="log-text"><?php echo htmlentities($log['Log']['text']); ?></td>
 		<td class="actions">
 			<?php echo $html->link(__('Report', true), array('action'=>'report', $log['Log']['id']), null, sprintf(__('Are you sure you want to report this message?', true))); ?>
 		</td>
