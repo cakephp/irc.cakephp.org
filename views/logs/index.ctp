@@ -15,22 +15,22 @@
  * Redistributions of files must retain the above copyright notice.
  *
  * @filesource
- * @copyright		Copyright 2005-2008, Cake Software Foundation, Inc.
- * @link			http://www.cakefoundation.org/projects/info/cakebot
- * @package			$TM_DIRECTORY
- * @subpackage		$TM_DIRECTORY
- * @since			$TM_DIRECTORY v (1.0)
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
- * @license			http://www.opensource.org/licenses/mit-license.php The MIT License
+ * @copyright     Copyright 2005-2008, Cake Software Foundation, Inc.
+ * @link          http://www.cakefoundation.org/projects/info/cakebot
+ * @package       $TM_DIRECTORY
+ * @subpackage    $TM_DIRECTORY
+ * @since         $TM_DIRECTORY v (1.0)
+ * @version       $Revision$
+ * @modifiedby    $LastChangedBy$
+ * @lastmodified  $Date$
+ * @license       http://www.opensource.org/licenses/mit-license.php The MIT License
  */
 /**
  * Tells controller
  *
  *
- * @package		cakebot
- * @subpackage	cakebot.views.channels
+ * @package       cakebot
+ * @subpackage    cakebot.views.channels
  */
 ?>
 <h2 id="channels">Channels</h2>

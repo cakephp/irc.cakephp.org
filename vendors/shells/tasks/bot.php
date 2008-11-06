@@ -15,31 +15,31 @@
  * Redistributions of files must retain the above copyright notice.
  *
  * @filesource
- * @copyright		Copyright 2005-2008, Cake Software Foundation, Inc.
- * @link			http://www.cakefoundation.org/projects/info/cakebot
- * @package			$TM_DIRECTORY
- * @subpackage		$TM_DIRECTORY
- * @since			$TM_DIRECTORY v (1.0)
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
- * @license			http://www.opensource.org/licenses/mit-license.php The MIT License
+ * @copyright     Copyright 2005-2008, Cake Software Foundation, Inc.
+ * @link          http://www.cakefoundation.org/projects/info/cakebot
+ * @package       $TM_DIRECTORY
+ * @subpackage    $TM_DIRECTORY
+ * @since         $TM_DIRECTORY v (1.0)
+ * @version       $Revision$
+ * @modifiedby    $LastChangedBy$
+ * @lastmodified  $Date$
+ * @license       http://www.opensource.org/licenses/mit-license.php The MIT License
  */
 /**
  * Short description for class.
  *
  *
- * @package		cakebot
- * @subpackage	cakebot.vendors.shells.tasks
+ * @package       cakebot
+ * @subpackage    cakebot.vendors.shells.tasks
  */
 App::import('Core', 'Socket');
 App::import('Core', 'Set');
 /**
  * BotTask class
  *
- * @uses                 CakeSocket
- * @package
- * @subpackage           .home.andy.www.ircBot.app.vendors.shells.tasks
+ * @uses          CakeSocket
+ * @package       
+ * @subpackage    .home.andy.www.ircBot.app.vendors.shells.tasks
  */
 class BotTask extends CakeSocket {
 /**

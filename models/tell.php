@@ -13,22 +13,22 @@
  * Redistributions of files must retain the above copyright notice.
  *
  * @filesource
- * @copyright            CakePHP(tm) : Rapid Development Framework <http://www.cakephp.org/>
- * @link                 http://www.cakephp.org
- * @package              cakebot
- * @subpackage           cakebot.models
- * @since                1.0
- * @version              $Revision$
- * @modifiedBy           $LastChangedBy$
- * @lastModified         $Date$
- * @license              http://www.opensource.org/licenses/mit-license.php The MIT License
+ * @copyright     CakePHP(tm) : Rapid Development Framework <http://www.cakephp.org/>
+ * @link          http://www.cakephp.org
+ * @package       cakebot
+ * @subpackage    cakebot.models
+ * @since         1.0
+ * @version       $Revision$
+ * @modifiedby    $LastChangedBy$
+ * @lastmodified  $Date$
+ * @license       http://www.opensource.org/licenses/mit-license.php The MIT License
  */
 /**
  * Tell class
  *
- * @uses                 AppModel
- * @package              cakebot
- * @subpackage           cakebot.models
+ * @uses          AppModel
+ * @package       cakebot
+ * @subpackage    cakebot.models
  */
 class Tell extends AppModel {
 /**

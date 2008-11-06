@@ -16,15 +16,15 @@
  * Redistributions of files must retain the above copyright notice.
  *
  * @filesource
- * @copyright		Copyright 2005-2008, Cake Software Foundation, Inc.
- * @link			http://www.cakefoundation.org/projects/info/cakebot
- * @package			cakebot
- * @subpackage		cakebot.vendors
- * @since			CakeBot v (1.0)
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
- * @license			http://www.opensource.org/licenses/mit-license.php The MIT License
+ * @copyright     Copyright 2005-2008, Cake Software Foundation, Inc.
+ * @link          http://www.cakefoundation.org/projects/info/cakebot
+ * @package       cakebot
+ * @subpackage    cakebot.vendors
+ * @since         CakeBot v (1.0)
+ * @version       $Revision$
+ * @modifiedby    $LastChangedBy$
+ * @lastmodified  $Date$
+ * @license       http://www.opensource.org/licenses/mit-license.php The MIT License
  */
 /**
  * Short description for class.
@@ -32,8 +32,8 @@
  * ngircd : starts irc server
  * cake irc : launches irc bot
  *
- * @package		cakebot
- * @subpackage	cakebot.vendors
+ * @package       cakebot
+ * @subpackage    cakebot.vendors
  */
 class IrcShell extends Shell {
 	var $tasks = array(

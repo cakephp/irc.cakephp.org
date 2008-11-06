@@ -1,5 +1,5 @@
 <?php
-/* SVN FILE: $Id: $ */
+/* SVN FILE: $Id$ */
 /**
  * Short description for file.
  *
@@ -15,22 +15,22 @@
  * Redistributions of files must retain the above copyright notice.
  *
  * @filesource
- * @copyright		Copyright 2005-2008, Cake Software Foundation, Inc.
- * @link			http://www.cakefoundation.org/projects/info/cakebot
- * @package			$TM_DIRECTORY
- * @subpackage		$TM_DIRECTORY
- * @since			$TM_DIRECTORY v (1.0)
- * @version			$Revision: 21 $
- * @modifiedby		$LastChangedBy: gwoo $
- * @lastmodified	$Date: 2008-05-27 12:58:52 -0700 (Tue, 27 May 2008) $
- * @license			http://www.opensource.org/licenses/mit-license.php The MIT License
+ * @copyright     Copyright 2005-2008, Cake Software Foundation, Inc.
+ * @link          http://www.cakefoundation.org/projects/info/cakebot
+ * @package       $TM_DIRECTORY
+ * @subpackage    $TM_DIRECTORY
+ * @since         $TM_DIRECTORY v (1.0)
+ * @version       $Revision$
+ * @modifiedby    $LastChangedBy$
+ * @lastmodified  $Date$
+ * @license       http://www.opensource.org/licenses/mit-license.php The MIT License
  */
 /**
  * Tells controller
  *
  *
- * @package		cakebot
- * @subpackage	cakebot.views.channels
+ * @package       cakebot
+ * @subpackage    cakebot.views.channels
  */
 ?>
 <div class="channels view">
