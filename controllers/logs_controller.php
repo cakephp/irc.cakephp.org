@@ -43,7 +43,7 @@ class LogsController extends AppController {
  * @var array
  * @access public
  */
-	var $helpers = array('Html', 'Form', 'Time');
+	var $helpers = array('Html', 'Form', 'Time', 'Text');
 /**
  * uses property
  *
