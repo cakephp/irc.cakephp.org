@@ -25,21 +25,13 @@
  * @lastmodified  $Date$
  * @license       http://www.opensource.org/licenses/mit-license.php The MIT License
  */
-/**
- * Short description for class.
- *
- *
- * @package       cakebot
- * @subpackage    cakebot.vendors.shells.tasks
- */
 App::import('Core', 'Socket');
 App::import('Core', 'Set');
 /**
  * BotTask class
  *
- * @uses          CakeSocket
- * @package       
- * @subpackage    .home.andy.www.ircBot.app.vendors.shells.tasks
+ * @package       cakebot
+ * @subpackage    cakebot.vendors.shells.tasks
  */
 class BotTask extends CakeSocket {
 /**

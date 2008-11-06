@@ -26,7 +26,6 @@
 /**
  * Channel class
  *
- * @uses          AppModel
  * @package       cakebot
  * @subpackage    cakebot.models
  */

@@ -26,7 +26,6 @@
 /**
  * TellsController class
  *
- * @uses          AppController
  * @package       cakebot
  * @subpackage    cakebot.controllers
  */

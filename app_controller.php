@@ -18,9 +18,9 @@
  * @filesource
  * @copyright     Copyright 2005-2008, Cake Software Foundation, Inc.
  * @link          http://www.cakefoundation.org/projects/info/cakephp CakePHP(tm) Project
- * @package       cake
- * @subpackage    cake.app
- * @since         CakePHP(tm) v 0.2.9
+ * @package       cakebot
+ * @subpackage    cakebot
+ * @since         cakebot v 1.0
  * @version       $Revision$
  * @modifiedby    $LastChangedBy$
  * @lastmodified  $Date$
@@ -29,7 +29,6 @@
 /**
  * AppController class
  *
- * @uses          Controller
  * @package       cakebot
  * @subpackage    cakebot
  */
