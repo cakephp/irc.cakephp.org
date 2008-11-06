@@ -17,9 +17,9 @@
  * @filesource
  * @copyright     Copyright 2005-2008, Cake Software Foundation, Inc.
  * @link          http://www.cakefoundation.org/projects/info/cakebot
- * @package       $TM_DIRECTORY
- * @subpackage    $TM_DIRECTORY
- * @since         $TM_DIRECTORY v (1.0)
+ * @package       cakebot
+ * @subpackage    cakebot
+ * @since         cakebot v (1.0)
  * @version       $Revision$
  * @modifiedby    $LastChangedBy$
  * @lastmodified  $Date$
