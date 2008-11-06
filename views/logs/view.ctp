@@ -77,8 +77,19 @@ foreach ($logs as $log):
 	}
 ?>
 	<tr<?php echo $class;?>>
-		<td><?php echo $html->link('#', array('action' => 'link', $log['Log']['id'], $wrap), array('title' => 'direct link to: ' .
-		$log['Log']['text'])); ?></td>
+		<td><?php
+		if ($log['Log']['id'] == $highlight) {
+			echo $html->link('#', '#message' . $log['Log']['id'], array(
+				'id' => 'message' . $log['Log']['id'],
+				'title' => 'direct link to: ' .	$log['Log']['text'])
+			);
+		} else {
+			echo $html->link('#', array('action' => 'link', $log['Log']['id'], $wrap, '#' => 'message' . ($log['Log']['id'] + 10)), array(
+				'id' => 'message' . $log['Log']['id'],
+				'title' => 'direct link to: ' .	$log['Log']['text'])
+			);
+		}
+		?></td>
 		<td nowrap="true"><?php echo $time->niceShort($log['Log']['created'], $offset); ?></td>
 		<td><?php echo $log['Log']['username']; ?></td>
 		<td class="log-text"><?php echo $html->clean($log['Log']['text']); ?></td>
