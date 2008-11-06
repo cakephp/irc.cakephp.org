@@ -77,7 +77,8 @@ foreach ($logs as $log):
 	}
 ?>
 	<tr<?php echo $class;?>>
-		<td><?php echo $html->link('#', array('action' => 'link', $log['Log']['id'], $wrap)); ?></td>
+		<td><?php echo $html->link('#', array('action' => 'link', $log['Log']['id'], $wrap), array('title' => 'direct link to: ' .
+		$log['Log']['text'])); ?></td>
 		<td nowrap="true"><?php echo $time->niceShort($log['Log']['created'], $offset); ?></td>
 		<td><?php echo $log['Log']['username']; ?></td>
 		<td class="log-text"><?php echo $html->clean($log['Log']['text']); ?></td>
