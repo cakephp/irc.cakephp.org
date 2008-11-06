@@ -92,7 +92,7 @@ foreach ($logs as $log):
 		?></td>
 		<td nowrap="true"><?php echo $time->niceShort($log['Log']['created'], $offset); ?></td>
 		<td><?php echo $log['Log']['username']; ?></td>
-		<td class="log-text"><?php echo $html->clean($log['Log']['text']); ?></td>
+		<td class="log-text"><?php echo $html->clean(htmlentities($log['Log']['text'])); ?></td>
 		<td class="actions">
 			<?php echo $html->link(__('Report', true), array('action'=>'report', $log['Log']['id']), null, sprintf(__('Are you sure you want to report this message?', true))); ?>
 		</td>
