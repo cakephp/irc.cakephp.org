@@ -7,7 +7,7 @@ body{
 font-family:"lucida grande",verdana,helvetica,arial,sans-serif;
 font-size:12px;
 color:#333;
-background:#003d4c url(images/body_bg.gif) repeat-x;  
+background:#003d4c url(images/body_bg.gif) repeat-x;
 margin: 0;
 }
 
@@ -43,7 +43,7 @@ font-family:'Gill Sans','lucida grande',helvetica, arial, sans-serif;
 font-size:28px;
 font-weight:normal;
 }
-  
+
 em {
  font-size: 12px;
 }
@@ -61,7 +61,7 @@ list-style-image:  url("images/arrow.gif");
 
 #container{
 	position:relative;
-	background: url(../img/cake.icon.gif) no-repeat 10px 10px;  
+	background: url(../img/cake.icon.gif) no-repeat 10px 10px;
 	padding-top:44px;
 }
 
@@ -74,7 +74,7 @@ list-style-image:  url("images/arrow.gif");
 }
 
 #header h1 a {
-	color:#fff;  
+	color:#fff;
 }
 
 #content{
@@ -122,7 +122,7 @@ list-style-image:  url("images/arrow.gif");
 	background:#cc6;
 	padding-top: 9px;
 	width:100%;
-} 
+}
 #main_nav .navigation {
 	margin-left: 120px;
 	font-weight: bold;
@@ -139,7 +139,7 @@ list-style-image:  url("images/arrow.gif");
 	right:0;
 	z-index:5;
 	background:transparent;
-} 
+}
 
 #secondary_nav a{
 	color:#c0c25b;
@@ -514,4 +514,7 @@ Log style information
 .logs th.text {
 	text-align: left;
 	border-left: 5px;
+}
+tr.highlight td{
+	background: yellow;
 }

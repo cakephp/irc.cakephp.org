@@ -63,6 +63,11 @@ class LogsController extends AppController {
 			'Log.created' => 'DESC'
 		)
 	);
+	function beforeFilter() {
+		parent::beforeFilter();
+		$this->Auth->allow(array('link'));
+	}
+
 /**
  * index method
  *
@@ -108,6 +113,66 @@ class LogsController extends AppController {
 	function view($channel = null) {
 		$this->Log->recursive = 0;
 		$this->set('logs', $this->paginate('Log', array('channel' => "#$channel")));
+	}
+/**
+ * link method
+ *
+ * 'perma' link to an individual message
+ *
+ * @param mixed $id
+ * @return void
+ * @access public
+ */
+	function link($id = null, $_wrap = null) {
+		$wrap = $_wrap;
+		if (!$wrap) {
+			$wrap = 20;
+		}
+		if ($wrap > 50) {
+			$this->redirect('/');
+		}
+		if (!$id) {
+			$this->redirect($this->referer('/', true));
+		}
+		$channel = $this->Log->field('channel', array('id' => $id));
+		$first = $this->Log->find('first', array(
+			'fields' => array('id'),
+			'conditions' => array ('channel' => $channel, 'id >=' => $id),
+			'offset' => $wrap,
+			'limit' => 1,
+			'order' => 'id ASC'
+		));
+		if (!$first) {
+			$first = $this->Log->find('first', array(
+				'fields' => array('id'),
+				'conditions' => array ('channel' => $channel, 'id >=' => $id),
+				'order' => 'id DESC'
+			));
+		}
+		$last = $this->Log->find('first', array(
+			'fields' => array('id'),
+			'conditions' => array ('channel' => $channel, 'id <=' => $id),
+			'offset' => $wrap,
+			'limit' => 1,
+			'order' => 'id DESC'
+		));
+		if (!$last) {
+			$last = $this->Log->find('first', array(
+				'fields' => array('id'),
+				'conditions' => array ('channel' => $channel, 'id <=' => $id),
+				'order' => 'id ASC'
+			));
+		}
+
+		$this->paginate['limit'] = $wrap * 3;
+		$this->set('logs', $this->paginate('Log', array(
+			'channel' => $channel,
+			'id <=' => $first['Log']['id'],
+			'id >=' => $last['Log']['id'],
+		)));
+		$this->set('highlight', $id);
+		$this->set('wrap', $_wrap);
+		$this->render('view');
 	}
 /**
  * delete method
