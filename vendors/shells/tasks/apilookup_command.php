@@ -86,7 +86,7 @@ class ApilookupCommandTask extends Object {
  * @access public
  */
 	function execute() {
-		$apilookupURL = "%s: http://api.cakephp.org/%ssearch.php?query=%s";
+		$apilookupURL = "%s: http://api.cakephp.org/search/%s";
 		$queryString = '';
 		$counter = 0;
 		$args = func_get_args();
@@ -95,23 +95,19 @@ class ApilookupCommandTask extends Object {
 				$nick = $arg;
 			}
 			if($counter == 1) {
-				if(isset($this->apiTabs[$arg])) {
-					$this->apiTab = $this->apiTabs[$arg];
-				} else {
-					$this->apiTab = '';
-					$queryString .= $arg;
-				}
-			} elseif($counter > 1) {
 				$queryString .= $arg;
+			} elseif($counter > 1) {
+				$queryString .= "+" . $arg;
 			}
 			$counter++;
 		}
 		App::import('Sanitize');
-		$queryString = Sanitize::paranoid($queryString, array(':', '_', '.'));
+		$queryString = str_replace(":", "+", $queryString);
+		$queryString = Sanitize::paranoid($queryString, array('+', '_', '.'));
 		if(count($args) > 1) {
-			$return =  sprintf($apilookupURL, $nick, $this->apiTab, $queryString);
+			$return =  sprintf($apilookupURL, $nick, $queryString);
 		} else {
-			$return = $nick . ": What are you looking for? try ~apilookup query, ~apilookup tests query, ~apilookup 1.1 query";
+			$return = $nick . ": What are you looking for? try ~apilookup model";
 		}
 		$apilookupURL = $queryString = $counter = $args = $arg = $nick = $this->apiTab = null;
 		return $return;

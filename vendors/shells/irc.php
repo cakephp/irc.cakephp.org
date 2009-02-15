@@ -44,7 +44,8 @@ class IrcShell extends Shell {
 		'ApiCommand',
 		'ApilookupCommand',
 		'GoogleCommand',
-		'TracCommand'
+		'TracCommand',
+		'BookCommand'
 	);
 /**
  * Not implemented

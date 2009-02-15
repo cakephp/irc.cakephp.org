@@ -64,7 +64,7 @@ class ApiCommandTask extends Object {
 	function execute() {
 		if (func_num_args() > 1) {
 			$ClassName = implode(array_splice(func_get_args(), 1), "_");
-			$url =  sprintf( "http://api.cakephp.org/class_%s.html", Inflector::underscore($ClassName));
+			$url =  sprintf("http://api.cakephp.org/class/%s", strtolower(Inflector::slug(Inflector::underscore($ClassName), '-')));
 			$url = str_replace("__", "_", $url);
 			return "This API may have this at $url";
 		} else {
