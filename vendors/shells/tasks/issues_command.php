@@ -74,8 +74,11 @@ class IssuesCommandTask extends Object {
         // when users type: ~issues searchkeys
         $searchString = urlencode(implode(array_splice(func_get_args(), 1), " "));
         $HttpSocket = new HttpSocket();
-        $results = json_decode($HttpSocket->get("https://api.github.com/search/issues?sort=created&order=asc&q=repo:cakephp/cakephp+{$searchString}"), true);
-        unset($HttpSocket);
+        $response = $HttpSocket->get("https://api.github.com/search/issues?sort=created&order=asc&q=repo:cakephp/cakephp+{$searchString}");
+        $results = json_decode($response, true);
+        CakeLog::write('debug', 'Searching for: ' . $searchString);
+        CakeLog::write('debug', 'Results: ' . $response);
+        unset($response, $HttpSocket);
 
         if (empty($results['issues'])) {
             unset($results, $searchString);
