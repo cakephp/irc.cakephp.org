@@ -30,13 +30,13 @@ App::import('Core', 'HttpSocket'); // for version 1.3
 App::import('Core', 'Xml');
 
 /**
- * This is the ~tickets command
+ * This is the ~issues command
  *
  *
  * @package       cakebot
  * @subpackage    cakebot.vendors.shells.tasks
  */
-class TicketsCommandTask extends Object {
+class IssuesCommandTask extends Object {
 /**
  * Not implemented
  *
@@ -68,10 +68,10 @@ class TicketsCommandTask extends Object {
  */
 	function execute($userName = null, $query = null) {
 		$args = func_num_args();
-		// when user types ~tickets
+		// when user types ~issues
 		if ($args == 1) return 'Submit your ticket here: http://github.com/cakephp/cakephp/issues';
 
-		// when users type: ~tickets searchkeys
+		// when users type: ~issues searchkeys
 		$searchString = urlencode(implode(array_splice(func_get_args(), 1), " "));
 		$HttpSocket = new HttpSocket();
 		$xml = new Xml($HttpSocket->get("http://cakephp.lighthouseapp.com/tickets.xml?q={$searchString}"));
