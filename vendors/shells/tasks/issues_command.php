@@ -8,8 +8,8 @@
  * PHP versions 4 and 5
  *
  * Copyright 2005-2008, Cake Software Foundation, Inc.
- *								1785 E. Sahara Avenue, Suite 490-204
- *								Las Vegas, Nevada 89104
+ *                              1785 E. Sahara Avenue, Suite 490-204
+ *                              Las Vegas, Nevada 89104
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
@@ -43,22 +43,22 @@ class IssuesCommandTask extends Object {
  * @return void
  * @access public
  */
-	function startup() {
-	}
+    function startup() {
+    }
 /**
  * Not implemented
  *
  * @return void
  * @access public
  */
-	function initialize() {}
+    function initialize() {}
 /**
  * Not implemented
  *
  * @return void
  * @access public
  */
-	function loadTasks() {}
+    function loadTasks() {}
 /**
  * Create the message
  *
@@ -66,33 +66,31 @@ class IssuesCommandTask extends Object {
  * @return string the message to send to the user/channel
  * @access public
  */
-	function execute($userName = null, $query = null) {
-		$args = func_num_args();
-		// when user types ~issues
-		if ($args == 1) return 'Submit your ticket here: http://github.com/cakephp/cakephp/issues';
+    function execute($userName = null, $query = null) {
+        $args = func_num_args();
+        // when user types ~issues
+        if ($args == 1) return 'Submit your issue here: http://github.com/cakephp/cakephp/issues';
 
-		// when users type: ~issues searchkeys
-		$searchString = urlencode(implode(array_splice(func_get_args(), 1), " "));
-		$HttpSocket = new HttpSocket();
-		$xml = new Xml($HttpSocket->get("http://cakephp.lighthouseapp.com/tickets.xml?q={$searchString}"));
-		$results = $xml->toArray();
-		unset($xml, $HttpSocket);
+        // when users type: ~issues searchkeys
+        $searchString = urlencode(implode(array_splice(func_get_args(), 1), " "));
+        $HttpSocket = new HttpSocket();
+        $results = json_decode($HttpSocket->get("https://api.github.com/search/issues?sort=created&order=asc&q=repo:cakephp/cakephp+{$searchString}"), true);
+        unset($HttpSocket);
 
-		if (!isset($results['Tickets'])) {
-			unset($results, $searchString);
-			return "No tickets found.";
-		}
+        if (empty($results['issues'])) {
+            unset($results, $searchString);
+            return "No issues found.";
+        }
 
-		$count = count($results['Tickets']['Ticket']);
-		if (isset($results['Tickets']['Ticket'][0])) {
-			$out = sprintf("%d tickets found. To see the tickets go to: https://github.com/cakephp/cakephp/search?type=Issues&q=%s", $count, $searchString);
-			unset($results, $count, $searchString);
-			return $out;
-		}
+        $count = (int)$results['total_count'];
+        if ($count > 1) {
+            $out = sprintf("%d tickets found. To see the tickets go to: https://github.com/cakephp/cakephp/search?type=Issues&q=%s", $count, $searchString);
+            unset($results, $count, $searchString);
+            return $out;
+        }
 
-		$out = sprintf("1 ticket found. To see the ticket go to: %s", $results['Tickets']['Ticket']['url']);
-		unset($results, $count, $searchString);
-		return $out;
-	}
+        $out = sprintf("1 ticket found. To see the ticket go to: %s", $results['items'][0]['url']);
+        unset($results, $count, $searchString);
+        return $out;
+    }
 }
-?>
