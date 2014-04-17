@@ -76,7 +76,7 @@ class IssuesCommandTask extends Object {
         $results = json_decode($HttpSocket->get("https://api.github.com/search/issues?sort=created&order=asc&q=repo:cakephp/cakephp+{$searchString}"), true);
         unset($HttpSocket);
 
-        if (empty($results['issues'])) {
+        if (empty($results['items'])) {
             unset($results, $searchString);
             return "No issues found.";
         }
