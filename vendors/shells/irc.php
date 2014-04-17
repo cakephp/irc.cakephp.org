@@ -47,6 +47,7 @@ class IrcShell extends Shell {
 		'IssuesCommand',
 		'BookCommand',
 		'RolloverCommand',
+		'SlapCommand',
 	);
 /**
  * Not implemented
