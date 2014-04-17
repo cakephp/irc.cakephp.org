@@ -69,7 +69,7 @@ class TicketsCommandTask extends Object {
 	function execute($userName = null, $query = null) {
 		$args = func_num_args();
 		// when user types ~tickets
-		if ($args == 1) return 'Submit your ticket here: http://cakephp.lighthouseapp.com/tickets';
+		if ($args == 1) return 'Submit your ticket here: http://github.com/cakephp/cakephp/issues';
 
 		// when users type: ~tickets searchkeys
 		$searchString = urlencode(implode(array_splice(func_get_args(), 1), " "));
@@ -85,7 +85,7 @@ class TicketsCommandTask extends Object {
 
 		$count = count($results['Tickets']['Ticket']);
 		if (isset($results['Tickets']['Ticket'][0])) {
-			$out = sprintf("%d tickets found. To see the tickets go to: http://cakephp.lighthouseapp.com/tickets?q=%s", $count, $searchString);
+			$out = sprintf("%d tickets found. To see the tickets go to: https://github.com/cakephp/cakephp/search?type=Issues&q=%s", $count, $searchString);
 			unset($results, $count, $searchString);
 			return $out;
 		}
