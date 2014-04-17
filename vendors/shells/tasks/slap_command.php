@@ -34,7 +34,7 @@ class SlapCommandTask extends Object {
 
 	function execute($userName, $otherUser) {
 		if (empty($otherUser)) {
-			return "/me slaps $userName with an extremely large trout";
+			return "/me slaps $userName for being a dumbass (Copyrighted by ADmad)";
 		}
 		return "/me slaps $otherUser with a large trout";
 	}
