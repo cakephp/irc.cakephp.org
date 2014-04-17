@@ -62,7 +62,7 @@ class BinCommandTask extends Object {
  * @access public
  */
 	function execute($userName) {
-		return "Please paste some code in here ----> https://gist.github.com/ then post the url in the channel. [bin.cakephp.org is deprecated]";
+		return "Please paste some code in here ----> https://gist.github.com/ then post the url in the channel. [bin.cakephp.org is deprecated, please save your pastes before they are deleted]";
 	}
 }
 ?>
