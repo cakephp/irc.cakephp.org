@@ -33,7 +33,10 @@ class SlapCommandTask extends Object {
 	function loadTasks() {}
 
 	function execute($userName, $otherUser) {
-		return "/me slaps $otherUser with a large troute";
+		if (empty($otherUser)) {
+			return "/me slaps $userName with an extremely large trout";
+		}
+		return "/me slaps $otherUser with a large trout";
 	}
 
 }
