@@ -27,7 +27,6 @@
  */
 
 App::import('Core', 'HttpSocket'); // for version 1.3
-App::import('Core', 'Xml');
 
 /**
  * This is the ~issues command
@@ -74,11 +73,9 @@ class IssuesCommandTask extends Object {
         // when users type: ~issues searchkeys
         $searchString = urlencode(implode(array_splice(func_get_args(), 1), " "));
         $HttpSocket = new HttpSocket();
-        $response = $HttpSocket->get("https://api.github.com/search/issues?sort=created&order=asc&q=repo:cakephp/cakephp+{$searchString}");
-        $results = json_decode($response, true);
+        $results = json_decode($HttpSocket->get("https://api.github.com/search/issues?sort=created&order=asc&q=repo:cakephp/cakephp+{$searchString}"), true);
         CakeLog::write('debug', 'Searching for: ' . $searchString);
-        CakeLog::write('debug', 'Results: ' . $response);
-        unset($response, $HttpSocket);
+        unset($HttpSocket);
 
         if (empty($results['issues'])) {
             unset($results, $searchString);
