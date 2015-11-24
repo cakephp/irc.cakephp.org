@@ -31,6 +31,7 @@
 		<?php echo $title_for_layout;?> 
 		<?php __('for CakeBot: the best friend of irc'); ?>
 	</title>
+	<meta name="robots" content="noindex, nofollow">
 	<?php
 		echo $html->charset();
 		echo $html->meta('icon');
