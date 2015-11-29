@@ -112,8 +112,12 @@ class LogsController extends AppController {
  */
 	function view($channel = null) {
 		$this->Log->recursive = 0;
+		if (!empty($this->params['named']['page']) && $this->params['named']['page'] > 50) {
+			$this->redirect('/');
+		}
 		$this->set('logs', $this->paginate('Log', array('channel' => "#$channel")));
 	}
+
 /**
  * link method
  *
