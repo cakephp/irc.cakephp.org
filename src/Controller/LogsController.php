@@ -142,31 +142,31 @@ class LogsController extends AppController
         }
 
         $first = $this->Logs->find()
-                            ->where(['channel' => $log->channel, 'id >=' => $id])
+                            ->where(['channel_id' => $log->channel_id, 'id >=' => $id])
                             ->offset($offset)
                             ->order(['id' => 'ASC'])
                             ->first();
         if (!$first) {
             $first = $this->Logs->find()
-                    ->where(['channel' => $log->channel, 'id >=' => $id])
+                    ->where(['channel_id' => $log->channel_id, 'id >=' => $id])
                     ->order(['id' => 'DESC'])
                     ->first();
         }
         $last = $this->Logs->find()
-                           ->where(['channel' => $log->channel, 'id <=' => $id])
+                           ->where(['channel_id' => $log->channel_id, 'id <=' => $id])
                            ->offset($offset)
                            ->order(['id' => 'DESC'])
                            ->first();
         if (!$last) {
             $last = $this->Logs->find()
-                               ->where(['channel' => $log->channel, 'id <=' => $id])
+                               ->where(['channel_id' => $log->channel_id, 'id <=' => $id])
                                ->order(['id' => 'ASC'])
                                ->first();
         }
 
         $this->paginate['limit'] = $offset * 3;
         $this->paginate['conditions'] = [
-            'channel' => $log->channel,
+            'channel_id' => $log->channel_id,
             'id <=' => $first->id,
             'id >=' => $last->id,
         ];
