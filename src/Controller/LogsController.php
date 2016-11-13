@@ -38,7 +38,10 @@ class LogsController extends AppController
      */
     public function index()
     {
-        $this->set('channels', $this->Channels->find()->all());
+        $channels = $this->Channels->find()
+                                   ->where(['name <>' => 'CakeBot'])
+                                   ->all();
+        $this->set('channels', $channels);
     }
 
     /**
@@ -56,6 +59,9 @@ class LogsController extends AppController
         $channel = $this->Channels->find()
                                   ->where(['name' => "#${channelName}"])
                                   ->first();
+        if ($channel->name == 'CakeBot') {
+            return $this->redirect('/');
+        }
 
         $this->Crud->on('beforePaginate', function (Event $event) use ($channel) {
             $repository = $event->subject()->query->repository();
@@ -90,6 +96,9 @@ class LogsController extends AppController
         $channel = $this->Channels->find()
                                   ->where(['name' => "#${channelName}"])
                                   ->first();
+        if ($channel->name == 'CakeBot') {
+            return $this->redirect('/');
+        }
 
         $this->Flash->set('Matching "' . htmlspecialchars($term) . '"');
         $this->Crud->on('beforePaginate', function (Event $event) use ($channel, $term) {
@@ -139,6 +148,13 @@ class LogsController extends AppController
         $log = $this->Logs->find()->where(['id' => $id])->first();
         if (!$log) {
             return $this->redirect($this->referer('/', true));
+        }
+
+        $channel = $this->Channels->find()
+                          ->where(['id' => $log->channel_id])
+                          ->first();
+        if ($channel->name == 'CakeBot') {
+            return $this->redirect('/');
         }
 
         $first = $this->Logs->find()
