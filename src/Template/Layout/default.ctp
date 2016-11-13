@@ -38,13 +38,13 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     <nav class="top-bar expanded" data-topbar role="navigation">
         <ul class="title-area large-3 medium-4 columns">
             <li class="name">
-                <h1><a href=""><?= $this->fetch('title') ?></a></h1>
+                <h1><a href="/"><?= $this->fetch('title') ?></a></h1>
             </li>
         </ul>
         <div class="top-bar-section">
             <ul class="right">
-                <li><?= $this->Html->link('Channels', ['controller' => 'Channels']) ?></li>
-                <li><?= $this->Html->link('Logs', ['controller' => 'Logs']) ?></li>
+                <li><?= $this->Html->link('Channels', ['controller' => 'Logs', 'action' => 'index']) ?></li>
+                <li><?= $this->Html->link('Logs', ['controller' => 'Logs', 'action' => 'view', 'cakephp']) ?></li>
                 <li><?= $this->Html->link('Tells', ['controller' => 'Tells']) ?></li>
             </ul>
         </div>

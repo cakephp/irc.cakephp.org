@@ -47,6 +47,7 @@ Router::scope('/', function (RouteBuilder $routes) {
     $routes->extensions(['json']);
 
     $routes->connect('/', ['controller' => 'Logs', 'action' => 'view', 'cakephp']);
+    $routes->connect('/channels', ['controller' => 'Logs', 'action' => 'index']);
 
     /**
      * Connect catchall routes for all controllers.
