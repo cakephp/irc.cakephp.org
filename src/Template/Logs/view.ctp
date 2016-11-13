@@ -6,7 +6,7 @@ if (env('REQUEST_TIME')) {
     $offset =  sprintf('%01.0f', ((env('REQUEST_TIME') - $this->Time->gmt()) / 1800)) * 2;
 }
 if (in_array($this->request->action, ['view', 'search'])) {
-    $title = __('Logs for #{0}', $channel);
+    $title = __('Logs for {0}', $channel);
 } else {
     $title = __('Log message #{0}', $log->id);
 }
