@@ -24,7 +24,8 @@ class ChannelsTableTest extends TestCase
      * @var array
      */
     public $fixtures = [
-        'app.channels'
+        'app.channels',
+        'app.logs'
     ];
 
     /**

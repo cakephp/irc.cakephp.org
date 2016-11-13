@@ -24,5 +24,4 @@ class TellsController extends AppController
         $this->Crud->disable(['view', 'add', 'edit', 'delete']);
         parent::beforeFilter($event);
     }
-
 }

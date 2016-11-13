@@ -47,25 +47,29 @@ class LogsController extends AppController
      * @param mixed $channel
      * @return \Cake\Network\Response|null
      */
-    public function view($channel = null)
+    public function view($channelName = null)
     {
         if ($this->request->query('page', 1) > 50) {
             return $this->redirect('/');
         }
 
+        $channel = $this->Channels->find()
+                                  ->where(['name' => "#${channelName}"])
+                                  ->first();
+
         $this->Crud->on('beforePaginate', function (Event $event) use ($channel) {
             $repository = $event->subject()->query->repository();
 
             $this->paginate['conditions'] = [
-                sprintf('%s.channel', $repository->alias()) => "#${channel}"
+                sprintf('%s.channel_id', $repository->alias()) => $channel->id,
             ];
             $this->paginate['limit'] = 100;
             $this->paginate['order'] = [
-                sprintf('%s.created', $repository->alias()) => 'desc'
+                sprintf('%s.created', $repository->alias()) => 'desc',
             ];
         });
 
-        $this->set(['channel' => $channel]);
+        $this->set(['channel' => $channel->name]);
         return $this->Crud->execute();
     }
 
@@ -74,7 +78,7 @@ class LogsController extends AppController
      *
      * @return \Cake\Network\Response|null
      */
-    public function search($channel = null, $term = null)
+    public function search($channelName = null, $term = null)
     {
         if (!empty($this->request->data)) {
             return $this->redirect([
@@ -82,6 +86,10 @@ class LogsController extends AppController
                 urlencode($this->request->data('Search.query')),
             ]);
         }
+
+        $channel = $this->Channels->find()
+                                  ->where(['name' => "#${channelName}"])
+                                  ->first();
 
         $this->Flash->set('Matching "' . htmlspecialchars($term) . '"');
         $this->Crud->on('beforePaginate', function (Event $event) use ($channel, $term) {
@@ -91,7 +99,7 @@ class LogsController extends AppController
             }
 
             $this->paginate['conditions'] = [
-                sprintf('%s.channel', $repository->alias()) => "#${channel}",
+                sprintf('%s.channel_id', $repository->alias()) => $channel->id,
                 'OR' => [
                     sprintf('%s.username LIKE', $repository->alias()) => $term,
                     sprintf('%s.text LIKE', $repository->alias()) => $term,
@@ -99,11 +107,11 @@ class LogsController extends AppController
             ];
             $this->paginate['limit'] = 100;
             $this->paginate['order'] = [
-                sprintf('%s.created', $repository->alias()) => 'desc'
+                sprintf('%s.created', $repository->alias()) => 'desc',
             ];
         });
 
-        $this->set(['channel' => $channel]);
+        $this->set(['channel' => $channel->name]);
         return $this->Crud->execute();
     }
 

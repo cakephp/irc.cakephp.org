@@ -9,6 +9,8 @@ use Cake\Validation\Validator;
 /**
  * Logs Model
  *
+ * @property \Cake\ORM\Association\BelongsTo $Channels
+ *
  * @method \App\Model\Entity\Log get($primaryKey, $options = [])
  * @method \App\Model\Entity\Log newEntity($data = null, array $options = [])
  * @method \App\Model\Entity\Log[] newEntities(array $data, array $options = [])
@@ -37,6 +39,10 @@ class LogsTable extends Table
         $this->primaryKey('id');
 
         $this->addBehavior('Timestamp');
+
+        $this->belongsTo('Channels', [
+            'foreignKey' => 'channel_id'
+        ]);
     }
 
     /**
@@ -50,10 +56,6 @@ class LogsTable extends Table
         $validator
             ->integer('id')
             ->allowEmpty('id', 'create');
-
-        $validator
-            ->requirePresence('channel', 'create')
-            ->notEmpty('channel');
 
         $validator
             ->requirePresence('username', 'create')
@@ -76,6 +78,7 @@ class LogsTable extends Table
     public function buildRules(RulesChecker $rules)
     {
         $rules->add($rules->isUnique(['username']));
+        $rules->add($rules->existsIn(['channel_id'], 'Channels'));
 
         return $rules;
     }

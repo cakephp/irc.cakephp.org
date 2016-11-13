@@ -9,6 +9,8 @@ use Cake\Validation\Validator;
 /**
  * Channels Model
  *
+ * @property \Cake\ORM\Association\HasMany $Logs
+ *
  * @method \App\Model\Entity\Channel get($primaryKey, $options = [])
  * @method \App\Model\Entity\Channel newEntity($data = null, array $options = [])
  * @method \App\Model\Entity\Channel[] newEntities(array $data, array $options = [])
@@ -37,6 +39,10 @@ class ChannelsTable extends Table
         $this->primaryKey('id');
 
         $this->addBehavior('Timestamp');
+
+        $this->hasMany('Logs', [
+            'foreignKey' => 'channel_id'
+        ]);
     }
 
     /**

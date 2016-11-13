@@ -7,10 +7,12 @@ use Cake\ORM\Entity;
  * Log Entity
  *
  * @property int $id
- * @property string $channel
+ * @property int $channel_id
  * @property string $username
  * @property string $text
  * @property \Cake\I18n\Time $created
+ *
+ * @property \App\Model\Entity\Channel $channel
  */
 class Log extends Entity
 {

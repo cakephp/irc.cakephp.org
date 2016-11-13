@@ -42,8 +42,8 @@ class ChannelsFixture extends TestFixture
             'id' => 1,
             'enabled' => 1,
             'name' => 'Lorem ipsum dolor sit amet',
-            'created' => '2016-11-13 04:14:44',
-            'modified' => '2016-11-13 04:14:44'
+            'created' => '2016-11-13 09:59:05',
+            'modified' => '2016-11-13 09:59:05'
         ],
     ];
 }
