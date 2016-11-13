@@ -2,20 +2,20 @@
 .log-text {
     text-align: left;
 }
-.logs th.id {
+.tells th.id, .logs th.id {
     width: 33px;
 }
-.logs th.at {
+.tells th.at, .logs th.at {
     width: 160px
 }
-.logs th.username, .logs th.actions {
+.tells th.keyword, .logs th.username, .logs th.actions {
     width: 160px
 }
 .logs th.channel {
     width: 33px;
 }
 
-.logs th.text {
+.tells th.text, .logs th.text {
     text-align: left;
     border-left: 5px;
 }
