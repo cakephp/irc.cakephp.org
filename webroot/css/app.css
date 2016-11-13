@@ -1,0 +1,37 @@
+/* Log style information */
+.log-text {
+    text-align: left;
+}
+.logs th.id {
+    width: 33px;
+}
+.logs th.at {
+    width: 160px
+}
+.logs th.username, .logs th.actions {
+    width: 160px
+}
+.logs th.channel {
+    width: 33px;
+}
+
+.logs th.text {
+    text-align: left;
+    border-left: 5px;
+}
+tr.highlight td{
+    background: yellow;
+}
+table tbody tr td, table tr td {
+    line-height: normal;
+    padding: 0.2625rem 0.625rem;
+}
+table tr:nth-of-type(even) {
+    background: #f9f9f9;
+}
+.slack-icon {
+    display: inline-block;
+    height: 16px;
+    margin-right: 2px;
+    width: 16px;
+}
