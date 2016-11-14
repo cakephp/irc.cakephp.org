@@ -42,6 +42,7 @@ class LogsController extends AppController
                                    ->where(['enabled' => true])
                                    ->all();
         $this->set('channels', $channels);
+        $this->set('_serialize', ['channels']);
     }
 
     /**

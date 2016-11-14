@@ -43,7 +43,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
         </ul>
         <div class="top-bar-section">
             <ul class="right">
-                <li><?= $this->Html->link('Channels', ['controller' => 'Logs', 'action' => 'index']) ?></li>
+                <li><?= $this->Html->link('Channels', ['controller' => 'Channels', 'action' => 'index']) ?></li>
                 <li><?= $this->Html->link('Logs', ['controller' => 'Logs', 'action' => 'view', 'cakephp']) ?></li>
                 <li><?= $this->Html->link('Tells', ['controller' => 'Tells']) ?></li>
             </ul>
