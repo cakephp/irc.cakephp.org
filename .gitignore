@@ -3,3 +3,4 @@
 /tmp/*
 /logs/*
 .env
+config/Migrations/schema-dump-default.lock
