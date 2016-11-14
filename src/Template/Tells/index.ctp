@@ -1,5 +1,7 @@
 <div class="tells index large-12 medium-12 columns content">
     <h3><?= __('Tells') ?></h3>
+    <?= $this->element('search') ?>
+
     <table cellpadding="0" cellspacing="0">
         <thead>
             <tr>

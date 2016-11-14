@@ -78,17 +78,26 @@ class AppController extends Controller
                 'Crud.Api',
                 'Crud.ApiPagination',
                 'Crud.ApiQueryLog',
-                'CrudView.View',
                 'Crud.RelatedModels',
                 'Crud.Redirect',
             ],
         ]);
 
-        if (in_array($this->request->action, $this->searchActions)) {
+        if ($this->isAdmin) {
+            $this->Crud->addListener('CrudView.View');
+        }
+
+        if (in_array($this->request->action, $this->searchActions) && $this->modelClass !== null) {
             list($plugin, $tableClass) = pluginSplit($this->modelClass);
-            if (!empty($this->$tableClass) && $this->$tableClass->behaviors()->hasMethod('filterParams')) {
-                $this->Crud->addListener('Crud.Search');
-                $this->loadComponent('Search.Prg');
+            try {
+                if ($this->$tableClass->behaviors()->hasMethod('filterParams')) {
+                    $this->Crud->addListener('Crud.Search');
+                    $this->loadComponent('Search.Prg', [
+                        'actions' => $this->searchActions,
+                    ]);
+                }
+            } catch (MissingModelException $e) {
+            } catch (UnexpectedValueException $e) {
             }
         }
 

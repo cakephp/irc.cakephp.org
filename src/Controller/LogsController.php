@@ -13,6 +13,14 @@ class LogsController extends AppController
 {
 
     /**
+     * A list of actions where the Crud.SearchListener
+     * and Search.PrgComponent should be enabled
+     *
+     * @var array
+     */
+    protected $searchActions = ['view'];
+
+    /**
      * Before filter callback.
      *
      * @param \Cake\Event\Event $event The beforeRender event.
@@ -69,62 +77,15 @@ class LogsController extends AppController
 
         $this->Crud->on('beforePaginate', function (Event $event) use ($channel) {
             $repository = $event->subject()->query->repository();
-
-            $this->paginate['conditions'] = [
-                sprintf('%s.channel_id', $repository->alias()) => $channel->id,
-            ];
             $this->paginate['limit'] = 100;
-            $this->paginate['order'] = [
-                sprintf('%s.created', $repository->alias()) => 'desc',
-            ];
-        });
-
-        $this->set(['channel' => $channel->name]);
-        return $this->Crud->execute();
-    }
-
-    /**
-     * Search method
-     *
-     * @return \Cake\Network\Response|null
-     */
-    public function search($channelName = null, $term = null)
-    {
-        if (!empty($this->request->data)) {
-            return $this->redirect([
-                $this->request->data('Search.channel'),
-                urlencode($this->request->data('Search.query')),
-            ]);
-        }
-
-        $channel = $this->Channels->find()
-                                  ->where([
-                                        'name' => "#${channelName}",
-                                        'enabled' => true,
+            $event->subject()->query->where([
+                                        sprintf('%s.channel_id', $repository->alias()) => $channel->id,
                                     ])
-                                  ->first();
-        if (empty($channel)) {
-            return $this->redirect('/');
-        }
-
-        $this->Flash->set('Matching "' . htmlspecialchars($term) . '"');
-        $this->Crud->on('beforePaginate', function (Event $event) use ($channel, $term) {
-            $repository = $event->subject()->query->repository();
-            if (strpos($term, '%') === false) {
-                $term = '%' . $term . '%';
-            }
-
-            $this->paginate['conditions'] = [
-                sprintf('%s.channel_id', $repository->alias()) => $channel->id,
-                'OR' => [
-                    sprintf('%s.username LIKE', $repository->alias()) => $term,
-                    sprintf('%s.text LIKE', $repository->alias()) => $term,
-                ],
-            ];
-            $this->paginate['limit'] = 100;
-            $this->paginate['order'] = [
-                sprintf('%s.created', $repository->alias()) => 'desc',
-            ];
+                                    ->contain([])
+                                    ->limit(100)
+                                    ->order([
+                                        sprintf('%s.created', $repository->alias()) => 'desc',
+                                    ]);
         });
 
         $this->set(['channel' => $channel->name]);
@@ -190,19 +151,20 @@ class LogsController extends AppController
                                ->first();
         }
 
-        $this->paginate['limit'] = $offset * 3;
-        $this->paginate['conditions'] = [
-            'channel_id' => $log->channel_id,
-            'id <=' => $first->id,
-            'id >=' => $last->id,
-        ];
-
+        $logs = $this->Logs->find()
+                           ->where([
+                               'channel_id' => $log->channel_id,
+                               'id <=' => $first->id,
+                               'id >=' => $last->id,
+                           ])
+                           ->limit($offset * 3)
+                           ->order(['id' => 'DESC']);
         $this->set([
             'log' => $log,
-            'logs' => $this->paginate('Logs'),
+            'logs' => $logs,
             'highlight' => $id,
             'wrap' => $wrap,
         ]);
-        $this->render('view');
+        return $this->render('view');
     }
 }

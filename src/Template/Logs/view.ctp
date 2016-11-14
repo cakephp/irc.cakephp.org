@@ -17,15 +17,28 @@ if (!isset($highlight)) {
 
 <div class="logs index large-12 medium-12 columns content">
     <h3><?= $title ?></h3>
-    <p><?= $this->Paginator->counter('Page {{page}} of {{pages}}, showing {{current}} records out of {{count}} total, starting on record {{start}}, ending on {{end}}') ?></p>
+
+    <?php if (!empty($this->request->paging)) : ?>
+        <?= $this->element('search') ?>
+        <p><?= $this->Paginator->counter('Page {{page}} of {{pages}}, showing {{current}} records out of {{count}} total, starting on record {{start}}, ending on {{end}}') ?></p>
+    <?php endif; ?>
+
     <table cellpadding="0" cellspacing="0">
         <thead>
             <tr>
-                <th scope="col" class="id"><?= $this->Paginator->sort('id', '#') ?></th>
-                <th scope="col" class="at"><nobr><?= $this->Paginator->sort('created', 'At') ?></nobr></th>
-                <th scope="col" class="username"><?= $this->Paginator->sort('username') ?></th>
-                <th scope="col" class="text"><?= $this->Paginator->sort('text') ?></th>
-                <!-- <th scope="col" class="actions"><?= __('Report') ?></th> -->
+                <?php if (!empty($this->request->paging)) : ?>
+                    <th scope="col" class="id"><?= $this->Paginator->sort('id', '#') ?></th>
+                    <th scope="col" class="at"><nobr><?= $this->Paginator->sort('created', 'At') ?></nobr></th>
+                    <th scope="col" class="username"><?= $this->Paginator->sort('username') ?></th>
+                    <th scope="col" class="text"><?= $this->Paginator->sort('text') ?></th>
+                    <!-- <th scope="col" class="actions"><?= __('Report') ?></th> -->
+                <?php else: ?>
+                    <th scope="col" class="id">#</th>
+                    <th scope="col" class="at"><nobr><?= __('At') ?></nobr></th>
+                    <th scope="col" class="username"><?= __('Username') ?></th>
+                    <th scope="col" class="text"><?= __('Text') ?></th>
+                    <!-- <th scope="col" class="actions"><?= __('Report') ?></th> -->
+                <?php endif; ?>
             </tr>
         </thead>
         <tbody>
@@ -82,12 +95,14 @@ if (!isset($highlight)) {
             <?php endforeach; ?>
         </tbody>
     </table>
-    <div class="paginator">
-        <ul class="pagination">
-            <?= $this->Paginator->prev('< ' . __('previous')) ?>
-            <?= $this->Paginator->numbers() ?>
-            <?= $this->Paginator->next(__('next') . ' >') ?>
-        </ul>
-        <p><?= $this->Paginator->counter() ?></p>
-    </div>
+    <?php if (!empty($this->request->paging)) : ?>
+        <div class="paginator">
+            <ul class="pagination">
+                <?= $this->Paginator->prev('< ' . __('previous')) ?>
+                <?= $this->Paginator->numbers() ?>
+                <?= $this->Paginator->next(__('next') . ' >') ?>
+            </ul>
+            <p><?= $this->Paginator->counter() ?></p>
+        </div>
+    <?php endif; ?>
 </div>

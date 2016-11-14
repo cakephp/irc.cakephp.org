@@ -38,7 +38,17 @@ class LogsTable extends Table
         $this->displayField('id');
         $this->primaryKey('id');
 
+        $this->addBehavior('Search.Search');
         $this->addBehavior('Timestamp');
+        $this->searchManager()
+            ->add('q', 'Search.Like', [
+                'before' => true,
+                'after' => true,
+                'comparison' => 'LIKE',
+                'wildcardAny' => '*',
+                'wildcardOne' => '?',
+                'field' => ['username', 'text'],
+            ]);
 
         $this->belongsTo('Channels', [
             'foreignKey' => 'channel_id'

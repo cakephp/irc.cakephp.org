@@ -20,7 +20,6 @@ class TellsController extends AppController
      */
     public function beforeFilter(Event $event)
     {
-        $this->loadModel('Channels');
         $this->Crud->disable(['view', 'add', 'edit', 'delete']);
         parent::beforeFilter($event);
     }
