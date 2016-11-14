@@ -53,8 +53,7 @@
     },
     "scripts": {
         "compile": [
-            "bin/cake migrations migrate",
-            "bin/cake migrations migrate -p Josegonzalez\\CakeQueuesadilla"
+            "bin/cake migrations migrate"
         ],
         "post-install-cmd": "App\\Console\\Installer::postInstall",
         "post-create-project-cmd": "App\\Console\\Installer::postInstall",
