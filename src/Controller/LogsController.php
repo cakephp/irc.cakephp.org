@@ -39,7 +39,7 @@ class LogsController extends AppController
     public function index()
     {
         $channels = $this->Channels->find()
-                                   ->where(['name <>' => 'CakeBot'])
+                                   ->where(['enabled' => true])
                                    ->all();
         $this->set('channels', $channels);
     }
@@ -57,9 +57,12 @@ class LogsController extends AppController
         }
 
         $channel = $this->Channels->find()
-                                  ->where(['name' => "#${channelName}"])
+                                  ->where([
+                                        'name' => "#${channelName}",
+                                        'enabled' => true,
+                                    ])
                                   ->first();
-        if ($channel->name == 'CakeBot') {
+        if (empty($channel)) {
             return $this->redirect('/');
         }
 
@@ -94,9 +97,12 @@ class LogsController extends AppController
         }
 
         $channel = $this->Channels->find()
-                                  ->where(['name' => "#${channelName}"])
+                                  ->where([
+                                        'name' => "#${channelName}",
+                                        'enabled' => true,
+                                    ])
                                   ->first();
-        if ($channel->name == 'CakeBot') {
+        if (empty($channel)) {
             return $this->redirect('/');
         }
 
@@ -151,9 +157,12 @@ class LogsController extends AppController
         }
 
         $channel = $this->Channels->find()
-                          ->where(['id' => $log->channel_id])
+                          ->where([
+                                'id' => $log->channel_id,
+                                'enabled' => true,
+                            ])
                           ->first();
-        if ($channel->name == 'CakeBot') {
+        if (empty($channel)) {
             return $this->redirect('/');
         }
 
