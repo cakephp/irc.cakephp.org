@@ -14,6 +14,7 @@ if (!env('APP_NAME')) {
         'josegonzalez\Dotenv\Filter\UnderscoreArrayFilter',
         function ($data) {
             $keys = [
+                'App.fullbaseurl' => 'App.fullBaseUrl',
                 'Debug' => 'debug',
                 'Email.transport' => 'EmailTransport',
                 'Database.debug.kit' => 'Datasources.debug_kit',
@@ -30,7 +31,9 @@ if (!env('APP_NAME')) {
                 }
                 $value = Hash::get($data, $key);
                 $data = Hash::remove($data, $key);
-                $data = Hash::insert($data, $newKey, $value);
+                if ($value !== null) {
+                    $data = Hash::insert($data, $newKey, $value);
+                }
             }
 
             foreach ($data['Email'] as $key => $config) {

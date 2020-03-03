@@ -1,6 +1,6 @@
 {
     "name": "josegonzalez/app",
-    "description": "CakePHP skeleton app",
+    "description": "CakePHP irc log app",
     "homepage": "https://github.com/josegonzalez/app",
     "type": "project",
     "license": "MIT",
@@ -14,30 +14,32 @@
         "ext-pdo_mysql": "*",
         "ext-pdo_pgsql": "*",
         "ext-redis": "*",
-        "cakephp/cakephp": "3.3.*",
-        "mobiledetect/mobiledetectlib": "2.*",
-        "cakephp/migrations": "~1.0",
-        "cakephp/plugin-installer": "*",
-        "josegonzalez/dotenv": "2.*",
-        "friendsofcake/crud": "4.*",
-        "friendsofcake/crud-view": "0.*",
-        "friendsofcake/bootstrap-ui": "0.*",
-        "friendsofcake/search": "1.*",
+        "cakephp/cakephp": "3.8.*",
+        "cakephp/migrations": "^2.0.0",
+        "cakephp/plugin-installer": "^1.0",
+        "friendsofcake/bootstrap-ui": "1.*",
+        "friendsofcake/crud": "^5.0",
+        "friendsofcake/crud-view": "0.14.*",
+        "friendsofcake/search": "5.*",
+        "josegonzalez/cakephp-queuesadilla": "0.6.*",
+        "josegonzalez/cakephp-upload": "4.*",
+        "josegonzalez/cakephp-users": "0.*",
+        "josegonzalez/dotenv": "3.*",
+        "josegonzalez/php-error-handlers": "0.*",
+        "josegonzalez/queuesadilla": "0.*",
         "markstory/asset_compress": "3.*",
-        "josegonzalez/cakephp-upload": "3.*",
-        "josegonzalez/cakephp-queuesadilla": "0.3.*",
-        "josegonzalez/queuesadilla": "*",
-        "josegonzalez/php-error-handlers": "0.*"
+        "mobiledetect/mobiledetectlib": "2.*"
     },
     "require-dev": {
-        "psy/psysh": "@stable",
-        "cakephp/debug_kit": "~3.2",
-        "cakephp/bake": "~1.1",
-        "cakephp/cakephp-codesniffer": "~2.1"
+        "cakephp/bake": "^1.9.0",
+        "cakephp/cakephp-codesniffer": "^3.0",
+        "cakephp/debug_kit": "^3.17.0",
+        "josegonzalez/dotenv": "3.*",
+        "phpunit/phpunit": "^5|^6",
+        "psy/psysh": "@stable"
     },
     "suggest": {
         "markstory/asset_compress": "An asset compression plugin which provides file concatenation and a flexible filter system for preprocessing and minification.",
-        "phpunit/phpunit": "Allows automated tests to be run without system-wide install.",
         "cakephp/cakephp-codesniffer": "Allows to check the code against the coding standards used in CakePHP."
     },
     "autoload": {
@@ -53,7 +55,10 @@
     },
     "scripts": {
         "compile": [
-            "bin/cake migrations migrate"
+            "bin/cake migrations migrate",
+            "bin/cake migrations migrate -p Josegonzalez/CakeQueuesadilla",
+            "bin/cake migrations migrate -p Muffin/Tokenize",
+            "bin/cake migrations migrate -p ADmad/SocialAuth"
         ],
         "post-install-cmd": "App\\Console\\Installer::postInstall",
         "post-create-project-cmd": "App\\Console\\Installer::postInstall",
@@ -62,10 +67,13 @@
             "@cs-check",
             "@test"
         ],
-        "cs-check": "vendor/bin/phpcs --colors -p --standard=vendor/cakephp/cakephp-codesniffer/CakePHP ./src ./tests",
-        "cs-fix": "vendor/bin/phpcbf --colors --standard=vendor/cakephp/cakephp-codesniffer/CakePHP ./src ./tests",
-        "test": "vendor/bin/phpunit --colors=always"
+        "cs-check": "phpcs --colors -p --standard=vendor/cakephp/cakephp-codesniffer/CakePHP src/ tests/",
+        "cs-fix": "phpcbf --colors --standard=vendor/cakephp/cakephp-codesniffer/CakePHP src/ tests/",
+        "test": "phpunit --colors=always"
     },
     "minimum-stability": "dev",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "config": {
+        "sort-packages": true
+    }
 }
