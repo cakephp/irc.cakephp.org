@@ -50,6 +50,7 @@ class Application extends BaseApplication
         }
 
         // Load more plugins here
+        $this->addPlugin('ADmad/SocialAuth');
         $this->addPlugin('AssetCompress', ['bootstrap' => true]);
         $this->addPlugin('CrudView');
         $this->addPlugin('BootstrapUI');

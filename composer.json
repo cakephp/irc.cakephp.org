@@ -29,6 +29,7 @@
         "josegonzalez/queuesadilla": "0.*",
         "markstory/asset_compress": "3.*",
         "muffin/tokenize": "1.*",
+        "admad/cakephp-social-auth": "0.*",
         "mobiledetect/mobiledetectlib": "2.*"
     },
     "require-dev": {
