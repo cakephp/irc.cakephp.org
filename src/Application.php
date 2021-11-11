@@ -56,6 +56,7 @@ class Application extends BaseApplication
         $this->addPlugin('Crud');
         $this->addPlugin('Josegonzalez/CakeQueuesadilla');
         $this->addPlugin('Josegonzalez/Upload');
+        $this->addPlugin('Muffin/Tokenize');
         $this->addPlugin('Search');
         $this->addPlugin('Users', ['bootstrap' => true, 'router' => true]);
 
