@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0a36c85098cb667262cf32f2280ca7c0",
+    "content-hash": "5481dbfc70ebbf1161c78956c1584a09",
     "packages": [
         {
             "name": "admad/cakephp-social-auth",

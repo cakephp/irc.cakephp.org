@@ -28,6 +28,7 @@
         "josegonzalez/php-error-handlers": "0.*",
         "josegonzalez/queuesadilla": "0.*",
         "markstory/asset_compress": "3.*",
+        "muffin/tokenize": "1.*",
         "mobiledetect/mobiledetectlib": "2.*"
     },
     "require-dev": {
