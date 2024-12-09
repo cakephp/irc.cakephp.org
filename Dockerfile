@@ -26,7 +26,7 @@ RUN cd /opt/app \
 
 STOPSIGNAL SIGTERM
 
-EXPOSE 8080
+EXPOSE 80
 
 # Start both php-fpm and nginx
 CMD "/opt/app/run.sh"
